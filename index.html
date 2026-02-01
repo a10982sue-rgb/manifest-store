@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aiden's Manifest Store</title>
+    <title>SMGEN - Steam Manifest Generator</title>
+    <link rel="icon" href="https://store.steampowered.com/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -38,8 +39,8 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 80%, rgba(234, 179, 8, 0.05) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 30% 20%, rgba(23, 93, 146, 0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(102, 192, 244, 0.08) 0%, transparent 50%);
             animation: drift 20s ease-in-out infinite;
         }
 
@@ -69,29 +70,32 @@
         .logo-icon {
             width: 42px;
             height: 42px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            background: linear-gradient(135deg, #1a9fff 0%, #0d5c8f 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 18px;
-            color: white;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 20px rgba(26, 159, 255, 0.3);
+        }
+
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
         }
 
         .logo-text {
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-text span {
-            color: #8b5cf6;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #1a9fff 0%, #66c0f4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .vip-badge {
-            background: linear-gradient(135deg, #eab308 0%, #f59e0b 100%);
+            background: linear-gradient(135deg, #1a9fff 0%, #66c0f4 100%);
             color: #0a0a0f;
             padding: 6px 14px;
             border-radius: 20px;
@@ -156,9 +160,9 @@
         }
 
         .search-input:focus {
-            border-color: rgba(139, 92, 246, 0.5);
+            border-color: rgba(26, 159, 255, 0.5);
             background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+            box-shadow: 0 0 0 4px rgba(26, 159, 255, 0.1);
         }
 
         .search-input::placeholder {
@@ -205,7 +209,7 @@
 
         .game-card:hover {
             background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(139, 92, 246, 0.3);
+            border-color: rgba(26, 159, 255, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
@@ -261,7 +265,7 @@
 
         .download-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1a9fff 0%, #0d7fd4 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -278,7 +282,7 @@
 
         .download-btn:hover {
             transform: scale(1.02);
-            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 6px 24px rgba(26, 159, 255, 0.4);
         }
 
         .download-btn svg {
@@ -289,8 +293,8 @@
         .instructions {
             margin-top: 60px;
             padding: 24px;
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.1);
+            background: rgba(26, 159, 255, 0.05);
+            border: 1px solid rgba(26, 159, 255, 0.1);
             border-radius: 12px;
             text-align: left;
         }
@@ -298,7 +302,7 @@
         .instructions h3 {
             font-size: 14px;
             font-weight: 600;
-            color: #8b5cf6;
+            color: #1a9fff;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -405,21 +409,25 @@
 
     <header class="header">
         <div class="logo">
-            <div class="logo-icon">A</div>
-            <div class="logo-text">Aiden's <span>Store</span></div>
+            <div class="logo-icon">
+                <svg viewBox="0 0 65 65" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32.5 0C14.6 0 0 14.6 0 32.5c0 15.9 11.5 29.1 26.6 31.8l12.2-17.4c5.5-.2 10.5-2.6 14.1-6.2 7.3-7.3 7.3-19.1 0-26.4-7.3-7.3-19.1-7.3-26.4 0-3.9 3.9-5.8 9.2-5.6 14.4L7.4 43.9C2.8 39.5 0 33.3 0 26.5 0 11.9 11.9 0 26.5 0h6zm10.7 21.1c4.9 0 8.9 4 8.9 8.9s-4 8.9-8.9 8.9-8.9-4-8.9-8.9 4-8.9 8.9-8.9z"/>
+                </svg>
+            </div>
+            <div class="logo-text">SMGEN</div>
         </div>
-        <div class="vip-badge">Exclusive Access</div>
+        <div class="vip-badge">Manifest Generator</div>
     </header>
 
     <main class="main">
         <div class="hero">
-            <h1>Manifest Library</h1>
+            <h1>Steam Manifest Library</h1>
             <p>Search and download game manifests. Fast, reliable, always updated.</p>
         </div>
 
         <div class="stats">
             <div class="stat">
-                <div class="stat-value" id="game-count">1</div>
+                <div class="stat-value" id="game-count">4</div>
                 <div class="stat-label">Games</div>
             </div>
             <div class="stat">
@@ -463,7 +471,7 @@
     </main>
 
     <footer class="footer">
-        Made with precision · Not affiliated with Steam or Valve
+        SMGEN · Not affiliated with Steam or Valve Corporation
     </footer>
 
     <script>
@@ -477,6 +485,27 @@
                 manifestId: "7561906995606504576",
                 depotId: "1091501",
                 downloadFile: "1091500.lua"
+            },
+            {
+                name: "Grand Theft Auto V",
+                appId: "271590",
+                manifestId: "7509048598561981671",
+                depotId: "271591",
+                downloadFile: "271590.lua"
+            },
+            {
+                name: "Grand Theft Auto V - Enhanced",
+                appId: "271590",
+                manifestId: "6034018769743979226",
+                depotId: "271594",
+                downloadFile: "271590_enhanced.lua"
+            },
+            {
+                name: "Red Dead Redemption 2",
+                appId: "1174180",
+                manifestId: "8477312052549849498",
+                depotId: "1174181",
+                downloadFile: "1174180.lua"
             }
             // To add more games, copy the format below:
             // ,{
@@ -498,18 +527,16 @@
         const searchInput = document.getElementById('searchInput');
         const resultsContainer = document.getElementById('results');
 
-        // Download counter
         function getDownloadCount() {
-            return parseInt(localStorage.getItem('aidenStoreDownloads') || '0');
+            return parseInt(localStorage.getItem('smgenDownloads') || '0');
         }
 
         function incrementDownload() {
             const count = getDownloadCount() + 1;
-            localStorage.setItem('aidenStoreDownloads', count.toString());
+            localStorage.setItem('smgenDownloads', count.toString());
             document.getElementById('download-count').textContent = count;
         }
 
-        // Format date nicely
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
@@ -517,7 +544,6 @@
             return `${months[date.getMonth()]} ${date.getDate()}`;
         }
 
-        // Steam image URLs
         function getGameImage(appId) {
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg`;
         }
@@ -526,7 +552,6 @@
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
         }
 
-        // Create game card HTML
         function renderGameCard(game) {
             return `
                 <div class="game-card">
@@ -565,7 +590,6 @@
             `;
         }
 
-        // No results message
         function renderNoResults(query) {
             return `
                 <div class="no-results">
@@ -575,12 +599,10 @@
             `;
         }
 
-        // Show all games
         function renderAllGames() {
             resultsContainer.innerHTML = games.map(renderGameCard).join('');
         }
 
-        // Search games
         function searchGames(query) {
             const normalizedQuery = query.toLowerCase().trim();
             
@@ -601,12 +623,10 @@
             }
         }
 
-        // Listen for search input
         searchInput.addEventListener('input', (e) => {
             searchGames(e.target.value);
         });
 
-        // Initialize page
         renderAllGames();
         document.getElementById('game-count').textContent = games.length;
         document.getElementById('download-count').textContent = getDownloadCount();

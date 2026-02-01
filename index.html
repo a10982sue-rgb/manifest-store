@@ -1,21 +1,603 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Aiden's Lua Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aiden's Manifest Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #0b0e11; color: #00ff00; font-family: 'Courier New', Courier, monospace; text-align: center; padding: 50px; }
-        .box { border: 2px solid #00ff00; padding: 20px; display: inline-block; border-radius: 10px; background: #161b22; }
-        .btn { background: #00ff00; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; display: block; margin-top: 10px; }
-        .btn:hover { background: #00cc00; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #e4e4e7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background */
+        .bg-ambient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .bg-ambient::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(234, 179, 8, 0.05) 0%, transparent 50%);
+            animation: drift 20s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-2%, 2%) rotate(1deg); }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.8);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: #8b5cf6;
+        }
+
+        .vip-badge {
+            background: linear-gradient(135deg, #eab308 0%, #f59e0b 100%);
+            color: #0a0a0f;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Main content */
+        .main {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: #71717a;
+            font-size: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Search */
+        .search-container {
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 24px 18px 56px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            color: #e4e4e7;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #52525b;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #52525b;
+            pointer-events: none;
+        }
+
+        /* Results */
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #52525b;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Game Card */
+        .game-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-image {
+            width: 184px;
+            height: 69px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #1a1a24;
+        }
+
+        .game-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .game-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #71717a;
+        }
+
+        .meta-label {
+            color: #52525b;
+        }
+
+        .meta-value {
+            color: #a1a1aa;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .download-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        .download-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Instructions */
+        .instructions {
+            margin-top: 60px;
+            padding: 24px;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #a1a1aa;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .instructions code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 13px;
+            color: #e4e4e7;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 30px;
+            color: #3f3f46;
+            font-size: 13px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            margin-top: 40px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #52525b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Hidden initially */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .main {
+                padding: 40px 16px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .game-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .game-info {
+                text-align: center;
+            }
+
+            .game-meta {
+                justify-content: center;
+            }
+
+            .game-image {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 460/215;
+            }
+
+            .stats {
+                gap: 24px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>AIDEN'S MANIFEST STORE</h1>
-        <p>Cyberpunk 2077 (AppID 1091500)</p>
-        <a href="1091500.lua" download class="btn">DOWNLOAD LUA</a>
-        <hr>
-        <p>Instructions: Drop this file into your SteamTools/Config folder.</p>
-    </div>
+    <div class="bg-ambient"></div>
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <div class="logo-text">Aiden's <span>Store</span></div>
+        </div>
+        <div class="vip-badge">Exclusive Access</div>
+    </header>
+
+    <main class="main">
+        <div class="hero">
+            <h1>Manifest Library</h1>
+            <p>Search and download game manifests. Fast, reliable, always updated.</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="game-count">1</div>
+                <div class="stat-label">Games</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Downloads</div>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search games by name or App ID..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <!-- Results will be populated here -->
+        </div>
+
+        <div class="instructions">
+            <h3>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 16v-4"></path>
+                    <path d="M12 8h.01"></path>
+                </svg>
+                How to Use
+            </h3>
+            <ol>
+                <li>Search for your game using the search bar above</li>
+                <li>Click the download button to get the <code>.lua</code> file</li>
+                <li>Move the file to your <code>SteamTools/Config</code> folder</li>
+                <li>Restart Steam and enjoy</li>
+            </ol>
+        </div>
+    </main>
+
+    <footer class="footer">
+        Made with precision · Not affiliated with Steam or Valve
+    </footer>
+
+    <script>
+        // Game database - add more games here
+        const games = [
+            {
+                name: "Cyberpunk 2077",
+                appId: "1091500",
+                manifestId: "7561906995606504576",
+                depotId: "1091501",
+                downloadFile: "1091500.lua"
+            }
+            // Add more games here following the same format:
+            // {
+            //     name: "Game Name",
+            //     appId: "XXXXXX",
+            //     manifestId: "XXXXXXXXXXXXXXXXXX",
+            //     depotId: "XXXXXX",
+            //     downloadFile: "XXXXXX.lua"
+            // }
+        ];
+
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('results');
+
+        // Get Steam CDN image URL
+        function getGameImage(appId) {
+            return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg`;
+        }
+
+        // Get header image as fallback
+        function getGameHeaderImage(appId) {
+            return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
+        }
+
+        // Render game card
+        function renderGameCard(game) {
+            return `
+                <div class="game-card">
+                    <img 
+                        class="game-image" 
+                        src="${getGameImage(game.appId)}" 
+                        alt="${game.name}"
+                        onerror="this.src='${getGameHeaderImage(game.appId)}'"
+                    >
+                    <div class="game-info">
+                        <div class="game-title">${game.name}</div>
+                        <div class="game-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">App ID:</span>
+                                <span class="meta-value">${game.appId}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Depot:</span>
+                                <span class="meta-value">${game.depotId}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Manifest:</span>
+                                <span class="meta-value">${game.manifestId}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="${game.downloadFile}" download class="download-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7,10 12,15 17,10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download
+                    </a>
+                </div>
+            `;
+        }
+
+        // Render no results
+        function renderNoResults(query) {
+            return `
+                <div class="no-results">
+                    <div class="no-results-icon">🔍</div>
+                    <p>No games found for "${query}"</p>
+                </div>
+            `;
+        }
+
+        // Render all games
+        function renderAllGames() {
+            resultsContainer.innerHTML = games.map(renderGameCard).join('');
+        }
+
+        // Search function
+        function searchGames(query) {
+            const normalizedQuery = query.toLowerCase().trim();
+            
+            if (!normalizedQuery) {
+                renderAllGames();
+                return;
+            }
+
+            const filtered = games.filter(game => 
+                game.name.toLowerCase().includes(normalizedQuery) ||
+                game.appId.includes(normalizedQuery)
+            );
+
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML = renderNoResults(query);
+            } else {
+                resultsContainer.innerHTML = filtered.map(renderGameCard).join('');
+            }
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', (e) => {
+            searchGames(e.target.value);
+        });
+
+        // Initial render
+        renderAllGames();
+
+        // Update game count
+        document.getElementById('game-count').textContent = games.length;
+    </script>
 </body>
 </html>

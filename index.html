@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* Ambient background */
         .bg-ambient {
             position: fixed;
             top: 0;
@@ -49,7 +48,6 @@
             50% { transform: translate(-2%, 2%) rotate(1deg); }
         }
 
-        /* Header */
         .header {
             position: relative;
             z-index: 10;
@@ -103,7 +101,6 @@
             text-transform: uppercase;
         }
 
-        /* Main content */
         .main {
             position: relative;
             z-index: 10;
@@ -135,7 +132,6 @@
             margin: 0 auto;
         }
 
-        /* Search */
         .search-container {
             margin-bottom: 40px;
         }
@@ -178,7 +174,6 @@
             pointer-events: none;
         }
 
-        /* Results */
         .results {
             display: flex;
             flex-direction: column;
@@ -197,7 +192,6 @@
             opacity: 0.5;
         }
 
-        /* Game Card */
         .game-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -207,7 +201,6 @@
             align-items: center;
             gap: 20px;
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
         .game-card:hover {
@@ -259,7 +252,7 @@
 
         .meta-value {
             color: #a1a1aa;
-            font-family: 'SF Mono', 'Monaco', monospace;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
             background: rgba(255, 255, 255, 0.05);
             padding: 2px 8px;
             border-radius: 4px;
@@ -293,7 +286,6 @@
             height: 16px;
         }
 
-        /* Instructions */
         .instructions {
             margin-top: 60px;
             padding: 24px;
@@ -324,12 +316,11 @@
             background: rgba(0, 0, 0, 0.3);
             padding: 2px 8px;
             border-radius: 4px;
-            font-family: 'SF Mono', 'Monaco', monospace;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
             font-size: 13px;
             color: #e4e4e7;
         }
 
-        /* Footer */
         .footer {
             position: relative;
             z-index: 10;
@@ -341,7 +332,6 @@
             margin-top: 40px;
         }
 
-        /* Stats */
         .stats {
             display: flex;
             justify-content: center;
@@ -368,12 +358,6 @@
             margin-top: 4px;
         }
 
-        /* Hidden initially */
-        .hidden {
-            display: none;
-        }
-
-        /* Responsive */
         @media (max-width: 640px) {
             .header {
                 padding: 16px 20px;
@@ -409,6 +393,10 @@
             .stats {
                 gap: 24px;
             }
+
+            .stat-value {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
@@ -435,12 +423,12 @@
                 <div class="stat-label">Games</div>
             </div>
             <div class="stat">
-                <div class="stat-value">24/7</div>
-                <div class="stat-label">Uptime</div>
+                <div class="stat-value" id="download-count">0</div>
+                <div class="stat-label">Downloads</div>
             </div>
             <div class="stat">
-                <div class="stat-value">∞</div>
-                <div class="stat-label">Downloads</div>
+                <div class="stat-value" id="last-updated">—</div>
+                <div class="stat-label">Updated</div>
             </div>
         </div>
 
@@ -454,9 +442,7 @@
             </div>
         </div>
 
-        <div class="results" id="results">
-            <!-- Results will be populated here -->
-        </div>
+        <div class="results" id="results"></div>
 
         <div class="instructions">
             <h3>
@@ -481,7 +467,9 @@
     </footer>
 
     <script>
-        // Game database - add more games here
+        // =============================================
+        // GAME DATABASE - ADD YOUR GAMES HERE
+        // =============================================
         const games = [
             {
                 name: "Cyberpunk 2077",
@@ -490,9 +478,9 @@
                 depotId: "1091501",
                 downloadFile: "1091500.lua"
             }
-            // Add more games here following the same format:
-            // {
-            //     name: "Game Name",
+            // To add more games, copy the format below:
+            // ,{
+            //     name: "Game Name Here",
             //     appId: "XXXXXX",
             //     manifestId: "XXXXXXXXXXXXXXXXXX",
             //     depotId: "XXXXXX",
@@ -500,20 +488,45 @@
             // }
         ];
 
+        // Change this date when you update the store
+        const lastUpdated = "2024-12-19";
+
+        // =============================================
+        // DO NOT EDIT BELOW THIS LINE
+        // =============================================
+
         const searchInput = document.getElementById('searchInput');
         const resultsContainer = document.getElementById('results');
 
-        // Get Steam CDN image URL
+        // Download counter
+        function getDownloadCount() {
+            return parseInt(localStorage.getItem('aidenStoreDownloads') || '0');
+        }
+
+        function incrementDownload() {
+            const count = getDownloadCount() + 1;
+            localStorage.setItem('aidenStoreDownloads', count.toString());
+            document.getElementById('download-count').textContent = count;
+        }
+
+        // Format date nicely
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getDate()}`;
+        }
+
+        // Steam image URLs
         function getGameImage(appId) {
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg`;
         }
 
-        // Get header image as fallback
         function getGameHeaderImage(appId) {
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
         }
 
-        // Render game card
+        // Create game card HTML
         function renderGameCard(game) {
             return `
                 <div class="game-card">
@@ -540,7 +553,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="${game.downloadFile}" download class="download-btn">
+                    <a href="${game.downloadFile}" download class="download-btn" onclick="incrementDownload()">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7,10 12,15 17,10"></polyline>
@@ -552,7 +565,7 @@
             `;
         }
 
-        // Render no results
+        // No results message
         function renderNoResults(query) {
             return `
                 <div class="no-results">
@@ -562,12 +575,12 @@
             `;
         }
 
-        // Render all games
+        // Show all games
         function renderAllGames() {
             resultsContainer.innerHTML = games.map(renderGameCard).join('');
         }
 
-        // Search function
+        // Search games
         function searchGames(query) {
             const normalizedQuery = query.toLowerCase().trim();
             
@@ -588,16 +601,16 @@
             }
         }
 
-        // Event listeners
+        // Listen for search input
         searchInput.addEventListener('input', (e) => {
             searchGames(e.target.value);
         });
 
-        // Initial render
+        // Initialize page
         renderAllGames();
-
-        // Update game count
         document.getElementById('game-count').textContent = games.length;
+        document.getElementById('download-count').textContent = getDownloadCount();
+        document.getElementById('last-updated').textContent = formatDate(lastUpdated);
     </script>
 </body>
 </html>

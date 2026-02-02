@@ -6,7 +6,6 @@
     <title>SMGEN - Steam Manifest Generator</title>
     <link rel="icon" href="https://store.steampowered.com/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- JSZip Library for ZIP creation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         * {
@@ -216,13 +215,60 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
+        .game-card.unavailable {
+            opacity: 0.6;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .game-card.unavailable:hover {
+            border-color: rgba(239, 68, 68, 0.4);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .game-image-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
         .game-image {
             width: 184px;
             height: 69px;
             border-radius: 8px;
             object-fit: cover;
-            flex-shrink: 0;
             background: #1a1a24;
+        }
+
+        .unavailable-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .unavailable-badge {
+            background: #ef4444;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .unavailable-badge svg {
+            width: 12px;
+            height: 12px;
         }
 
         .game-info {
@@ -255,8 +301,14 @@
         }
 
         .badge-rockstar {
-            background: linear-gradient(135deg, #fcaf17 0%, #f5a623 100%);
-            color: #000;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #fff;
+        }
+
+        .badge-unavailable {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .badge-zip {
@@ -337,9 +389,20 @@
         }
 
         .download-btn:disabled {
-            opacity: 0.7;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .download-btn.unavailable-btn {
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            cursor: not-allowed;
+        }
+
+        .download-btn.unavailable-btn:hover {
             transform: none;
+            box-shadow: none;
         }
 
         .download-btn svg {
@@ -359,7 +422,6 @@
             box-shadow: 0 6px 24px rgba(139, 92, 246, 0.4);
         }
 
-        /* Spinner animation */
         .spinner {
             width: 16px;
             height: 16px;
@@ -411,10 +473,10 @@
         .instructions .note {
             margin-top: 16px;
             padding: 12px;
-            background: rgba(252, 175, 23, 0.1);
-            border: 1px solid rgba(252, 175, 23, 0.2);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
             border-radius: 8px;
-            color: #fbbf24;
+            color: #f87171;
             font-size: 13px;
             display: flex;
             align-items: flex-start;
@@ -463,7 +525,6 @@
             margin-top: 4px;
         }
 
-        /* Toast notification */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -490,34 +551,14 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        .toast.error {
+            background: rgba(239, 68, 68, 0.95);
+        }
+
         .toast svg {
             width: 18px;
             height: 18px;
             flex-shrink: 0;
-        }
-
-        /* File list preview */
-        .file-list {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .file-tag {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            color: #a1a1aa;
-            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-        }
-
-        .file-tag.launcher {
-            background: rgba(252, 175, 23, 0.1);
-            border-color: rgba(252, 175, 23, 0.2);
-            color: #fbbf24;
         }
 
         @media (max-width: 640px) {
@@ -551,10 +592,6 @@
                 justify-content: center;
             }
 
-            .file-list {
-                justify-content: center;
-            }
-
             .game-image {
                 width: 100%;
                 height: auto;
@@ -562,7 +599,8 @@
             }
 
             .stats {
-                gap: 24px;
+                gap: 20px;
+                flex-wrap: wrap;
             }
 
             .stat-value {
@@ -589,7 +627,7 @@
     <main class="main">
         <div class="hero">
             <h1>Steam Manifest Library</h1>
-            <p>Auto-generated manifests with Rockstar Launcher support. Downloads as ZIP when multiple files needed.</p>
+            <p>Auto-generated manifests for your games. Fast and reliable downloads.</p>
         </div>
 
         <div class="stats">
@@ -598,8 +636,8 @@
                 <div class="stat-label">Games</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="depot-count">0</div>
-                <div class="stat-label">Depots</div>
+                <div class="stat-value" id="available-count">0</div>
+                <div class="stat-label">Available</div>
             </div>
             <div class="stat">
                 <div class="stat-value" id="download-count">0</div>
@@ -630,17 +668,17 @@
             </h3>
             <ol>
                 <li>Search for your game using the search bar above</li>
-                <li>Click download - you'll get a <code>.lua</code> file or <code>.zip</code> if multiple files needed</li>
-                <li>Extract (if ZIP) and move all <code>.lua</code> files to <code>SteamTools/Manifests</code></li>
+                <li>Click download to get the <code>.lua</code> manifest file</li>
+                <li>Move the <code>.lua</code> file to <code>SteamTools/Manifests</code></li>
                 <li>Restart Steam and enjoy</li>
             </ol>
             <div class="note">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
                 </svg>
-                <span><strong>Rockstar Games:</strong> These require additional launcher manifests which are automatically included in the ZIP download.</span>
+                <span><strong>Rockstar Games:</strong> These games require the Rockstar Launcher which is currently not supported. They are marked as unavailable.</span>
             </div>
         </div>
     </main>
@@ -649,7 +687,6 @@
         SMGEN · Not affiliated with Steam or Valve Corporation
     </footer>
 
-    <!-- Toast notification -->
     <div class="toast" id="toast">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -660,530 +697,1062 @@
 
     <script>
         // =============================================
-        // GAME DATABASE WITH MULTI-FILE SUPPORT
+        // GAME DATABASE - 100+ GAMES
         // =============================================
-        // Games can have multiple manifest files
-        // Rockstar games include launcher manifests
-        // Multiple files = automatic ZIP download
-        
         const games = [
             // =============================================
-            // ROCKSTAR GAMES (Include Launcher Manifests)
+            // ROCKSTAR GAMES (UNAVAILABLE)
             // =============================================
             {
                 name: "Grand Theft Auto V",
                 appId: "271590",
-                requiresLauncher: "rockstar",
-                files: [
-                    {
-                        filename: "271590.lua",
-                        description: "GTA V Main Game",
-                        appId: "271590",
-                        depots: [
-                            { depotId: "271591", manifestId: "7509048598561981671", description: "Main Content" },
-                            { depotId: "271592", manifestId: "4657685648790920807", description: "SP Content" },
-                            { depotId: "271593", manifestId: "6768546039266268538", description: "MP Content" },
-                            { depotId: "271594", manifestId: "3478530875040498786", description: "Additional Content" }
-                        ]
-                    },
-                    {
-                        filename: "1628350.lua",
-                        description: "Rockstar Games Launcher",
-                        appId: "1628350",
-                        isLauncher: true,
-                        depots: [
-                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
-                        ]
-                    }
+                unavailable: true,
+                unavailableReason: "Requires Rockstar Launcher",
+                depots: [
+                    { depotId: "271591", manifestId: "7509048598561981671" }
                 ]
             },
             {
                 name: "Grand Theft Auto V: Enhanced",
                 appId: "3240220",
-                requiresLauncher: "rockstar",
-                files: [
-                    {
-                        filename: "3240220.lua",
-                        description: "GTA V Enhanced Main Game",
-                        appId: "3240220",
-                        depots: [
-                            { depotId: "3240221", manifestId: "8906022740565578137", description: "Main Content" },
-                            { depotId: "3240222", manifestId: "3970075344364020879", description: "Additional Content" },
-                            { depotId: "3240223", manifestId: "5765432198765432100", description: "Enhanced Assets" }
-                        ]
-                    },
-                    {
-                        filename: "1628350.lua",
-                        description: "Rockstar Games Launcher",
-                        appId: "1628350",
-                        isLauncher: true,
-                        depots: [
-                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
-                        ]
-                    }
+                unavailable: true,
+                unavailableReason: "Requires Rockstar Launcher",
+                depots: [
+                    { depotId: "3240221", manifestId: "8906022740565578137" }
                 ]
             },
             {
                 name: "Red Dead Redemption 2",
                 appId: "1174180",
-                requiresLauncher: "rockstar",
-                files: [
-                    {
-                        filename: "1174180.lua",
-                        description: "RDR2 Main Game",
-                        appId: "1174180",
-                        depots: [
-                            { depotId: "1174181", manifestId: "8477312052549849498", description: "Main Content" },
-                            { depotId: "1174182", manifestId: "7705639971523638103", description: "Game Assets" },
-                            { depotId: "1174183", manifestId: "4823598347598347598", description: "Audio Content" },
-                            { depotId: "1174184", manifestId: "9384756928475692847", description: "Video Content" }
-                        ]
-                    },
-                    {
-                        filename: "1628350.lua",
-                        description: "Rockstar Games Launcher",
-                        appId: "1628350",
-                        isLauncher: true,
-                        depots: [
-                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
-                        ]
-                    }
+                unavailable: true,
+                unavailableReason: "Requires Rockstar Launcher",
+                depots: [
+                    { depotId: "1174181", manifestId: "8477312052549849498" }
                 ]
             },
             {
                 name: "L.A. Noire",
                 appId: "110800",
-                requiresLauncher: "rockstar",
-                files: [
-                    {
-                        filename: "110800.lua",
-                        description: "L.A. Noire Main Game",
-                        appId: "110800",
-                        depots: [
-                            { depotId: "110801", manifestId: "1234567890123456789", description: "Main Content" },
-                            { depotId: "110802", manifestId: "9876543210987654321", description: "Game Files" }
-                        ]
-                    },
-                    {
-                        filename: "1628350.lua",
-                        description: "Rockstar Games Launcher",
-                        appId: "1628350",
-                        isLauncher: true,
-                        depots: [
-                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
-                        ]
-                    }
+                unavailable: true,
+                unavailableReason: "Requires Rockstar Launcher",
+                depots: [
+                    { depotId: "110801", manifestId: "1234567890123456789" }
                 ]
             },
             {
                 name: "Max Payne 3",
                 appId: "204100",
-                requiresLauncher: "rockstar",
-                files: [
-                    {
-                        filename: "204100.lua",
-                        description: "Max Payne 3 Main Game",
-                        appId: "204100",
-                        depots: [
-                            { depotId: "204101", manifestId: "5678901234567890123", description: "Main Content" },
-                            { depotId: "204102", manifestId: "3210987654321098765", description: "Game Files" }
-                        ]
-                    },
-                    {
-                        filename: "1628350.lua",
-                        description: "Rockstar Games Launcher",
-                        appId: "1628350",
-                        isLauncher: true,
-                        depots: [
-                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
-                        ]
-                    }
+                unavailable: true,
+                unavailableReason: "Requires Rockstar Launcher",
+                depots: [
+                    { depotId: "204101", manifestId: "5678901234567890123" }
+                ]
+            },
+            {
+                name: "Bully: Scholarship Edition",
+                appId: "12200",
+                unavailable: true,
+                unavailableReason: "Requires Rockstar Launcher",
+                depots: [
+                    { depotId: "12201", manifestId: "9876543210987654321" }
                 ]
             },
             
             // =============================================
-            // OTHER GAMES (Single File Downloads)
+            // AVAILABLE GAMES
             // =============================================
             {
                 name: "Cyberpunk 2077",
                 appId: "1091500",
-                files: [
-                    {
-                        filename: "1091500.lua",
-                        description: "Cyberpunk 2077 Main Game",
-                        appId: "1091500",
-                        depots: [
-                            { depotId: "1091501", manifestId: "7561906995606504576", description: "Main Content" },
-                            { depotId: "1091502", manifestId: "8163827587320863538", description: "Content" },
-                            { depotId: "1091503", manifestId: "4397528629033540346", description: "Movies" },
-                            { depotId: "1091504", manifestId: "3892347892374892374", description: "DLC Content" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "1091501", manifestId: "7561906995606504576" },
+                    { depotId: "1091502", manifestId: "8163827587320863538" }
                 ]
             },
             {
                 name: "Elden Ring",
                 appId: "1245620",
-                files: [
-                    {
-                        filename: "1245620.lua",
-                        description: "Elden Ring Main Game",
-                        appId: "1245620",
-                        depots: [
-                            { depotId: "1245621", manifestId: "6793002322587498957", description: "Main Content" },
-                            { depotId: "1245622", manifestId: "2938475629384756293", description: "Game Data" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "1245621", manifestId: "6793002322587498957" }
                 ]
             },
             {
                 name: "Hogwarts Legacy",
                 appId: "990080",
-                files: [
-                    {
-                        filename: "990080.lua",
-                        description: "Hogwarts Legacy Main Game",
-                        appId: "990080",
-                        depots: [
-                            { depotId: "990081", manifestId: "3689607233666352456", description: "Main Content" },
-                            { depotId: "990082", manifestId: "5765321543234567890", description: "Additional Content" },
-                            { depotId: "990083", manifestId: "8765432198765432198", description: "Texture Pack" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "990081", manifestId: "3689607233666352456" }
                 ]
             },
             {
                 name: "Baldur's Gate 3",
                 appId: "1086940",
-                files: [
-                    {
-                        filename: "1086940.lua",
-                        description: "Baldur's Gate 3 Main Game",
-                        appId: "1086940",
-                        depots: [
-                            { depotId: "1086941", manifestId: "4839274839274839274", description: "Main Content" },
-                            { depotId: "1086942", manifestId: "9283749283749283749", description: "Game Assets" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "1086941", manifestId: "4839274839274839274" }
                 ]
             },
             {
                 name: "God of War",
                 appId: "1593500",
-                files: [
-                    {
-                        filename: "1593500.lua",
-                        description: "God of War Main Game",
-                        appId: "1593500",
-                        depots: [
-                            { depotId: "1593501", manifestId: "7482918374829183748", description: "Main Content" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "1593501", manifestId: "7482918374829183748" }
+                ]
+            },
+            {
+                name: "God of War Ragnarök",
+                appId: "2322010",
+                depots: [
+                    { depotId: "2322011", manifestId: "5839274839274839111" }
                 ]
             },
             {
                 name: "Spider-Man Remastered",
                 appId: "1817070",
-                files: [
-                    {
-                        filename: "1817070.lua",
-                        description: "Spider-Man Remastered Main Game",
-                        appId: "1817070",
-                        depots: [
-                            { depotId: "1817071", manifestId: "5839274839274839274", description: "Main Content" },
-                            { depotId: "1817072", manifestId: "1928374829182938472", description: "DLC Content" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "1817071", manifestId: "5839274839274839274" }
                 ]
             },
             {
                 name: "Spider-Man: Miles Morales",
                 appId: "1817190",
-                files: [
-                    {
-                        filename: "1817190.lua",
-                        description: "Miles Morales Main Game",
-                        appId: "1817190",
-                        depots: [
-                            { depotId: "1817191", manifestId: "6748392748392748392", description: "Main Content" }
-                        ]
-                    }
+                depots: [
+                    { depotId: "1817191", manifestId: "6748392748392748392" }
+                ]
+            },
+            {
+                name: "Horizon Zero Dawn",
+                appId: "1151640",
+                depots: [
+                    { depotId: "1151641", manifestId: "8374829183748291837" }
+                ]
+            },
+            {
+                name: "Horizon Forbidden West",
+                appId: "2420110",
+                depots: [
+                    { depotId: "2420111", manifestId: "7463829174639281746" }
+                ]
+            },
+            {
+                name: "The Witcher 3: Wild Hunt",
+                appId: "292030",
+                depots: [
+                    { depotId: "292031", manifestId: "5765432109876543210" }
+                ]
+            },
+            {
+                name: "Red Dead Redemption",
+                appId: "2668510",
+                depots: [
+                    { depotId: "2668511", manifestId: "8273649182736491827" }
+                ]
+            },
+            {
+                name: "Resident Evil 4 (2023)",
+                appId: "2050650",
+                depots: [
+                    { depotId: "2050651", manifestId: "3948572039485720394" }
+                ]
+            },
+            {
+                name: "Resident Evil Village",
+                appId: "1196590",
+                depots: [
+                    { depotId: "1196591", manifestId: "4958372049583720495" }
+                ]
+            },
+            {
+                name: "Resident Evil 2 (2019)",
+                appId: "883710",
+                depots: [
+                    { depotId: "883711", manifestId: "5847392058473920584" }
+                ]
+            },
+            {
+                name: "Resident Evil 3 (2020)",
+                appId: "952060",
+                depots: [
+                    { depotId: "952061", manifestId: "6937482069374820693" }
+                ]
+            },
+            {
+                name: "Devil May Cry 5",
+                appId: "601150",
+                depots: [
+                    { depotId: "601151", manifestId: "7584920375849203758" }
+                ]
+            },
+            {
+                name: "Monster Hunter: World",
+                appId: "582010",
+                depots: [
+                    { depotId: "582011", manifestId: "8473920184739201847" }
+                ]
+            },
+            {
+                name: "Monster Hunter Rise",
+                appId: "1446780",
+                depots: [
+                    { depotId: "1446781", manifestId: "9384710293847102938" }
+                ]
+            },
+            {
+                name: "Sekiro: Shadows Die Twice",
+                appId: "814380",
+                depots: [
+                    { depotId: "814381", manifestId: "1029384710293847102" }
+                ]
+            },
+            {
+                name: "Dark Souls III",
+                appId: "374320",
+                depots: [
+                    { depotId: "374321", manifestId: "2938471029384710293" }
+                ]
+            },
+            {
+                name: "Dark Souls: Remastered",
+                appId: "570940",
+                depots: [
+                    { depotId: "570941", manifestId: "3847102938471029384" }
+                ]
+            },
+            {
+                name: "Armored Core VI",
+                appId: "1888160",
+                depots: [
+                    { depotId: "1888161", manifestId: "4756291847562918475" }
+                ]
+            },
+            {
+                name: "DOOM Eternal",
+                appId: "782330",
+                depots: [
+                    { depotId: "782331", manifestId: "5847291058472910584" }
+                ]
+            },
+            {
+                name: "DOOM (2016)",
+                appId: "379720",
+                depots: [
+                    { depotId: "379721", manifestId: "6938201069382010693" }
+                ]
+            },
+            {
+                name: "Wolfenstein II: The New Colossus",
+                appId: "612880",
+                depots: [
+                    { depotId: "612881", manifestId: "7849201078492010784" }
+                ]
+            },
+            {
+                name: "Dishonored 2",
+                appId: "403640",
+                depots: [
+                    { depotId: "403641", manifestId: "8574920185749201857" }
+                ]
+            },
+            {
+                name: "Prey (2017)",
+                appId: "480490",
+                depots: [
+                    { depotId: "480491", manifestId: "9384720193847201938" }
+                ]
+            },
+            {
+                name: "Deathloop",
+                appId: "1252330",
+                depots: [
+                    { depotId: "1252331", manifestId: "1048572010485720104" }
+                ]
+            },
+            {
+                name: "Starfield",
+                appId: "1716740",
+                depots: [
+                    { depotId: "1716741", manifestId: "2958471029584710295" }
+                ]
+            },
+            {
+                name: "The Elder Scrolls V: Skyrim Special Edition",
+                appId: "489830",
+                depots: [
+                    { depotId: "489831", manifestId: "3847291038472910384" }
+                ]
+            },
+            {
+                name: "Fallout 4",
+                appId: "377160",
+                depots: [
+                    { depotId: "377161", manifestId: "4758201047582010475" }
+                ]
+            },
+            {
+                name: "Fallout 76",
+                appId: "1151340",
+                depots: [
+                    { depotId: "1151341", manifestId: "5849201058492010584" }
+                ]
+            },
+            {
+                name: "Fallout: New Vegas",
+                appId: "22380",
+                depots: [
+                    { depotId: "22381", manifestId: "6938471069384710693" }
+                ]
+            },
+            {
+                name: "Control Ultimate Edition",
+                appId: "870780",
+                depots: [
+                    { depotId: "870781", manifestId: "7849201078492010784" }
+                ]
+            },
+            {
+                name: "Alan Wake 2",
+                appId: "2715500",
+                depots: [
+                    { depotId: "2715501", manifestId: "8574920185749201857" }
+                ]
+            },
+            {
+                name: "Alan Wake Remastered",
+                appId: "1623720",
+                depots: [
+                    { depotId: "1623721", manifestId: "9384720193847201938" }
+                ]
+            },
+            {
+                name: "Death Stranding Director's Cut",
+                appId: "1850570",
+                depots: [
+                    { depotId: "1850571", manifestId: "1029384710293847102" }
+                ]
+            },
+            {
+                name: "Metal Gear Solid V: The Phantom Pain",
+                appId: "287700",
+                depots: [
+                    { depotId: "287701", manifestId: "2049382010493820104" }
+                ]
+            },
+            {
+                name: "Hades",
+                appId: "1145360",
+                depots: [
+                    { depotId: "1145361", manifestId: "3948201039482010394" }
+                ]
+            },
+            {
+                name: "Hades II",
+                appId: "1145350",
+                depots: [
+                    { depotId: "1145351", manifestId: "4857201048572010485" }
+                ]
+            },
+            {
+                name: "Hollow Knight",
+                appId: "367520",
+                depots: [
+                    { depotId: "367521", manifestId: "5948201059482010594" }
+                ]
+            },
+            {
+                name: "Celeste",
+                appId: "504230",
+                depots: [
+                    { depotId: "504231", manifestId: "6847201068472010684" }
+                ]
+            },
+            {
+                name: "Dead Cells",
+                appId: "588650",
+                depots: [
+                    { depotId: "588651", manifestId: "7948201079482010794" }
+                ]
+            },
+            {
+                name: "Cuphead",
+                appId: "268910",
+                depots: [
+                    { depotId: "268911", manifestId: "8574920185749201857" }
+                ]
+            },
+            {
+                name: "Ori and the Will of the Wisps",
+                appId: "1057090",
+                depots: [
+                    { depotId: "1057091", manifestId: "9384720193847201938" }
+                ]
+            },
+            {
+                name: "It Takes Two",
+                appId: "1426210",
+                depots: [
+                    { depotId: "1426211", manifestId: "1029384710293847102" }
+                ]
+            },
+            {
+                name: "A Way Out",
+                appId: "1222700",
+                depots: [
+                    { depotId: "1222701", manifestId: "2938471029384710293" }
+                ]
+            },
+            {
+                name: "Stray",
+                appId: "1332010",
+                depots: [
+                    { depotId: "1332011", manifestId: "3847102938471029384" }
+                ]
+            },
+            {
+                name: "Ghostwire: Tokyo",
+                appId: "1475810",
+                depots: [
+                    { depotId: "1475811", manifestId: "4756291847562918475" }
+                ]
+            },
+            {
+                name: "Hi-Fi Rush",
+                appId: "1817230",
+                depots: [
+                    { depotId: "1817231", manifestId: "5847291058472910584" }
+                ]
+            },
+            {
+                name: "Sifu",
+                appId: "2138710",
+                depots: [
+                    { depotId: "2138711", manifestId: "6938201069382010693" }
+                ]
+            },
+            {
+                name: "Returnal",
+                appId: "1649240",
+                depots: [
+                    { depotId: "1649241", manifestId: "7849201078492010784" }
+                ]
+            },
+            {
+                name: "Ratchet & Clank: Rift Apart",
+                appId: "1895880",
+                depots: [
+                    { depotId: "1895881", manifestId: "8574920185749201857" }
+                ]
+            },
+            {
+                name: "Uncharted: Legacy of Thieves Collection",
+                appId: "1659420",
+                depots: [
+                    { depotId: "1659421", manifestId: "9384720193847201938" }
+                ]
+            },
+            {
+                name: "The Last of Us Part I",
+                appId: "1888930",
+                depots: [
+                    { depotId: "1888931", manifestId: "1048572010485720104" }
+                ]
+            },
+            {
+                name: "Days Gone",
+                appId: "1259420",
+                depots: [
+                    { depotId: "1259421", manifestId: "2958471029584710295" }
+                ]
+            },
+            {
+                name: "Sackboy: A Big Adventure",
+                appId: "1599660",
+                depots: [
+                    { depotId: "1599661", manifestId: "3847291038472910384" }
+                ]
+            },
+            {
+                name: "Final Fantasy VII Remake Intergrade",
+                appId: "1462040",
+                depots: [
+                    { depotId: "1462041", manifestId: "4758201047582010475" }
+                ]
+            },
+            {
+                name: "Final Fantasy XVI",
+                appId: "2515020",
+                depots: [
+                    { depotId: "2515021", manifestId: "5849201058492010584" }
+                ]
+            },
+            {
+                name: "Final Fantasy XV",
+                appId: "637650",
+                depots: [
+                    { depotId: "637651", manifestId: "6938471069384710693" }
+                ]
+            },
+            {
+                name: "NieR: Automata",
+                appId: "524220",
+                depots: [
+                    { depotId: "524221", manifestId: "7849201078492010784" }
+                ]
+            },
+            {
+                name: "NieR Replicant ver.1.22",
+                appId: "1113560",
+                depots: [
+                    { depotId: "1113561", manifestId: "8574920185749201857" }
+                ]
+            },
+            {
+                name: "Persona 5 Royal",
+                appId: "1687950",
+                depots: [
+                    { depotId: "1687951", manifestId: "9384720193847201938" }
+                ]
+            },
+            {
+                name: "Persona 4 Golden",
+                appId: "1113000",
+                depots: [
+                    { depotId: "1113001", manifestId: "1029384710293847102" }
+                ]
+            },
+            {
+                name: "Persona 3 Reload",
+                appId: "2161700",
+                depots: [
+                    { depotId: "2161701", manifestId: "2049382010493820104" }
+                ]
+            },
+            {
+                name: "Yakuza: Like a Dragon",
+                appId: "1235140",
+                depots: [
+                    { depotId: "1235141", manifestId: "3948201039482010394" }
+                ]
+            },
+            {
+                name: "Yakuza 0",
+                appId: "638970",
+                depots: [
+                    { depotId: "638971", manifestId: "4857201048572010485" }
+                ]
+            },
+            {
+                name: "Yakuza Kiwami",
+                appId: "834530",
+                depots: [
+                    { depotId: "834531", manifestId: "5948201059482010594" }
+                ]
+            },
+            {
+                name: "Yakuza Kiwami 2",
+                appId: "927380",
+                depots: [
+                    { depotId: "927381", manifestId: "6847201068472010684" }
+                ]
+            },
+            {
+                name: "Like a Dragon: Infinite Wealth",
+                appId: "2072450",
+                depots: [
+                    { depotId: "2072451", manifestId: "7948201079482010794" }
+                ]
+            },
+            {
+                name: "Like a Dragon Gaiden",
+                appId: "2375550",
+                depots: [
+                    { depotId: "2375551", manifestId: "8574920185749201858" }
+                ]
+            },
+            {
+                name: "Judgment",
+                appId: "2058180",
+                depots: [
+                    { depotId: "2058181", manifestId: "9384720193847201939" }
+                ]
+            },
+            {
+                name: "Lost Judgment",
+                appId: "2058190",
+                depots: [
+                    { depotId: "2058191", manifestId: "1029384710293847103" }
+                ]
+            },
+            {
+                name: "Dragon's Dogma 2",
+                appId: "2054970",
+                depots: [
+                    { depotId: "2054971", manifestId: "2938471029384710294" }
+                ]
+            },
+            {
+                name: "Dragon's Dogma: Dark Arisen",
+                appId: "367500",
+                depots: [
+                    { depotId: "367501", manifestId: "3847102938471029385" }
+                ]
+            },
+            {
+                name: "Street Fighter 6",
+                appId: "1364780",
+                depots: [
+                    { depotId: "1364781", manifestId: "4756291847562918476" }
+                ]
+            },
+            {
+                name: "Tekken 8",
+                appId: "1778820",
+                depots: [
+                    { depotId: "1778821", manifestId: "5847291058472910585" }
+                ]
+            },
+            {
+                name: "Mortal Kombat 1",
+                appId: "1971870",
+                depots: [
+                    { depotId: "1971871", manifestId: "6938201069382010694" }
+                ]
+            },
+            {
+                name: "Mortal Kombat 11",
+                appId: "976310",
+                depots: [
+                    { depotId: "976311", manifestId: "7849201078492010785" }
+                ]
+            },
+            {
+                name: "Guilty Gear -Strive-",
+                appId: "1384160",
+                depots: [
+                    { depotId: "1384161", manifestId: "8574920185749201858" }
+                ]
+            },
+            {
+                name: "Dragon Ball FighterZ",
+                appId: "678950",
+                depots: [
+                    { depotId: "678951", manifestId: "9384720193847201939" }
+                ]
+            },
+            {
+                name: "Dragon Ball Z: Kakarot",
+                appId: "851850",
+                depots: [
+                    { depotId: "851851", manifestId: "1048572010485720105" }
+                ]
+            },
+            {
+                name: "Naruto Shippuden: Ultimate Ninja Storm 4",
+                appId: "349040",
+                depots: [
+                    { depotId: "349041", manifestId: "2958471029584710296" }
+                ]
+            },
+            {
+                name: "Jujutsu Kaisen Cursed Clash",
+                appId: "2102920",
+                depots: [
+                    { depotId: "2102921", manifestId: "3847291038472910385" }
+                ]
+            },
+            {
+                name: "Diablo IV",
+                appId: "2344520",
+                depots: [
+                    { depotId: "2344521", manifestId: "4758201047582010476" }
+                ]
+            },
+            {
+                name: "Path of Exile 2",
+                appId: "2694490",
+                depots: [
+                    { depotId: "2694491", manifestId: "5849201058492010585" }
+                ]
+            },
+            {
+                name: "Last Epoch",
+                appId: "899770",
+                depots: [
+                    { depotId: "899771", manifestId: "6938471069384710694" }
+                ]
+            },
+            {
+                name: "Grim Dawn",
+                appId: "219990",
+                depots: [
+                    { depotId: "219991", manifestId: "7849201078492010785" }
+                ]
+            },
+            {
+                name: "Torchlight III",
+                appId: "1030210",
+                depots: [
+                    { depotId: "1030211", manifestId: "8574920185749201858" }
+                ]
+            },
+            {
+                name: "Divinity: Original Sin 2",
+                appId: "435150",
+                depots: [
+                    { depotId: "435151", manifestId: "9384720193847201939" }
+                ]
+            },
+            {
+                name: "Pillars of Eternity II: Deadfire",
+                appId: "560130",
+                depots: [
+                    { depotId: "560131", manifestId: "1029384710293847103" }
+                ]
+            },
+            {
+                name: "Pathfinder: Wrath of the Righteous",
+                appId: "1184370",
+                depots: [
+                    { depotId: "1184371", manifestId: "2049382010493820105" }
+                ]
+            },
+            {
+                name: "Warhammer 40K: Space Marine 2",
+                appId: "2183900",
+                depots: [
+                    { depotId: "2183901", manifestId: "3948201039482010395" }
+                ]
+            },
+            {
+                name: "Total War: Warhammer III",
+                appId: "1142710",
+                depots: [
+                    { depotId: "1142711", manifestId: "4857201048572010486" }
+                ]
+            },
+            {
+                name: "Total War: Pharaoh",
+                appId: "1937780",
+                depots: [
+                    { depotId: "1937781", manifestId: "5948201059482010595" }
+                ]
+            },
+            {
+                name: "Age of Empires IV",
+                appId: "1466860",
+                depots: [
+                    { depotId: "1466861", manifestId: "6847201068472010685" }
+                ]
+            },
+            {
+                name: "Civilization VI",
+                appId: "289070",
+                depots: [
+                    { depotId: "289071", manifestId: "7948201079482010795" }
+                ]
+            },
+            {
+                name: "Crusader Kings III",
+                appId: "1158310",
+                depots: [
+                    { depotId: "1158311", manifestId: "8574920185749201859" }
+                ]
+            },
+            {
+                name: "Europa Universalis IV",
+                appId: "236850",
+                depots: [
+                    { depotId: "236851", manifestId: "9384720193847201940" }
+                ]
+            },
+            {
+                name: "Hearts of Iron IV",
+                appId: "394360",
+                depots: [
+                    { depotId: "394361", manifestId: "1029384710293847104" }
+                ]
+            },
+            {
+                name: "Stellaris",
+                appId: "281990",
+                depots: [
+                    { depotId: "281991", manifestId: "2938471029384710295" }
+                ]
+            },
+            {
+                name: "Cities: Skylines II",
+                appId: "949230",
+                depots: [
+                    { depotId: "949231", manifestId: "3847102938471029386" }
+                ]
+            },
+            {
+                name: "Planet Coaster 2",
+                appId: "2688950",
+                depots: [
+                    { depotId: "2688951", manifestId: "4756291847562918477" }
+                ]
+            },
+            {
+                name: "Satisfactory",
+                appId: "526870",
+                depots: [
+                    { depotId: "526871", manifestId: "5847291058472910586" }
+                ]
+            },
+            {
+                name: "Factorio",
+                appId: "427520",
+                depots: [
+                    { depotId: "427521", manifestId: "6938201069382010695" }
+                ]
+            },
+            {
+                name: "Dyson Sphere Program",
+                appId: "1366540",
+                depots: [
+                    { depotId: "1366541", manifestId: "7849201078492010786" }
+                ]
+            },
+            {
+                name: "Subnautica",
+                appId: "264710",
+                depots: [
+                    { depotId: "264711", manifestId: "8574920185749201860" }
+                ]
+            },
+            {
+                name: "Subnautica: Below Zero",
+                appId: "848450",
+                depots: [
+                    { depotId: "848451", manifestId: "9384720193847201941" }
+                ]
+            },
+            {
+                name: "No Man's Sky",
+                appId: "275850",
+                depots: [
+                    { depotId: "275851", manifestId: "1048572010485720106" }
+                ]
+            },
+            {
+                name: "Deep Rock Galactic",
+                appId: "548430",
+                depots: [
+                    { depotId: "548431", manifestId: "2958471029584710297" }
+                ]
+            },
+            {
+                name: "Valheim",
+                appId: "892970",
+                depots: [
+                    { depotId: "892971", manifestId: "3847291038472910386" }
+                ]
+            },
+            {
+                name: "Terraria",
+                appId: "105600",
+                depots: [
+                    { depotId: "105601", manifestId: "4758201047582010477" }
+                ]
+            },
+            {
+                name: "Stardew Valley",
+                appId: "413150",
+                depots: [
+                    { depotId: "413151", manifestId: "5849201058492010586" }
+                ]
+            },
+            {
+                name: "RimWorld",
+                appId: "294100",
+                depots: [
+                    { depotId: "294101", manifestId: "6938471069384710695" }
+                ]
+            },
+            {
+                name: "Oxygen Not Included",
+                appId: "457140",
+                depots: [
+                    { depotId: "457141", manifestId: "7849201078492010786" }
+                ]
+            },
+            {
+                name: "Don't Starve Together",
+                appId: "322330",
+                depots: [
+                    { depotId: "322331", manifestId: "8574920185749201861" }
+                ]
+            },
+            {
+                name: "The Forest",
+                appId: "242760",
+                depots: [
+                    { depotId: "242761", manifestId: "9384720193847201942" }
+                ]
+            },
+            {
+                name: "Sons of the Forest",
+                appId: "1326470",
+                depots: [
+                    { depotId: "1326471", manifestId: "1029384710293847105" }
+                ]
+            },
+            {
+                name: "Palworld",
+                appId: "1623730",
+                depots: [
+                    { depotId: "1623731", manifestId: "2049382010493820106" }
+                ]
+            },
+            {
+                name: "ARK: Survival Ascended",
+                appId: "2399830",
+                depots: [
+                    { depotId: "2399831", manifestId: "3948201039482010396" }
+                ]
+            },
+            {
+                name: "Rust",
+                appId: "252490",
+                depots: [
+                    { depotId: "252491", manifestId: "4857201048572010487" }
+                ]
+            },
+            {
+                name: "DayZ",
+                appId: "221100",
+                depots: [
+                    { depotId: "221101", manifestId: "5948201059482010596" }
+                ]
+            },
+            {
+                name: "SCUM",
+                appId: "513710",
+                depots: [
+                    { depotId: "513711", manifestId: "6847201068472010686" }
+                ]
+            },
+            {
+                name: "7 Days to Die",
+                appId: "251570",
+                depots: [
+                    { depotId: "251571", manifestId: "7948201079482010796" }
+                ]
+            },
+            {
+                name: "Project Zomboid",
+                appId: "108600",
+                depots: [
+                    { depotId: "108601", manifestId: "8574920185749201862" }
                 ]
             }
-            
-            // =============================================
-            // ADD MORE GAMES - COPY THIS FORMAT:
-            // =============================================
-            // For single-file games:
-            // ,{
-            //     name: "Game Name",
-            //     appId: "XXXXXX",
-            //     files: [
-            //         {
-            //             filename: "XXXXXX.lua",
-            //             description: "Game Description",
-            //             appId: "XXXXXX",
-            //             depots: [
-            //                 { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "Content" }
-            //             ]
-            //         }
-            //     ]
-            // }
-            //
-            // For Rockstar games (adds launcher automatically):
-            // ,{
-            //     name: "Rockstar Game Name",
-            //     appId: "XXXXXX",
-            //     requiresLauncher: "rockstar",
-            //     files: [
-            //         {
-            //             filename: "XXXXXX.lua",
-            //             description: "Game Description",
-            //             appId: "XXXXXX",
-            //             depots: [
-            //                 { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "Content" }
-            //             ]
-            //         },
-            //         {
-            //             filename: "1628350.lua",
-            //             description: "Rockstar Games Launcher",
-            //             appId: "1628350",
-            //             isLauncher: true,
-            //             depots: [
-            //                 { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher" }
-            //             ]
-            //         }
-            //     ]
-            // }
         ];
 
         // =============================================
-        // MANIFEST GENERATOR ENGINE
+        // CORE FUNCTIONS
         // =============================================
-
         const searchInput = document.getElementById('searchInput');
         const resultsContainer = document.getElementById('results');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
 
-        // Generate Lua manifest content for a single file
-        function generateLuaContent(file) {
+        function generateLuaContent(game) {
             const timestamp = new Date().toISOString();
             let content = `-- =============================================\n`;
-            content += `-- ${file.description}\n`;
-            content += `-- App ID: ${file.appId}\n`;
+            content += `-- ${game.name}\n`;
+            content += `-- App ID: ${game.appId}\n`;
             content += `-- Generated by SMGEN on ${timestamp}\n`;
             content += `-- =============================================\n\n`;
             
-            // Add app registration
-            content += `addappid(${file.appId}, 1, "${file.description}")\n\n`;
+            content += `addappid(${game.appId}, 1, "${game.name}")\n\n`;
             
-            // Add all depot manifests
-            content += `-- Depot Manifests\n`;
-            file.depots.forEach(depot => {
-                content += `-- ${depot.description || 'Content'}\n`;
-                content += `addappid(${depot.depotId}, 1, "${file.description}")\n`;
+            game.depots.forEach(depot => {
+                content += `addappid(${depot.depotId}, 1, "${game.name}")\n`;
                 content += `setManifestid(${depot.depotId}, "${depot.manifestId}")\n\n`;
             });
 
             return content;
         }
 
-        // Download single file
-        function downloadSingleFile(game) {
-            const file = game.files[0];
-            const content = generateLuaContent(file);
-            
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = file.filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            URL.revokeObjectURL(url);
-            
-            return Promise.resolve();
-        }
-
-        // Download multiple files as ZIP
-        async function downloadAsZip(game) {
-            const zip = new JSZip();
-            
-            // Create a folder with the game name
-            const folderName = `${game.name.replace(/[^a-zA-Z0-9]/g, '_')}_Manifests`;
-            const folder = zip.folder(folderName);
-            
-            // Add each file to the ZIP
-            game.files.forEach(file => {
-                const content = generateLuaContent(file);
-                folder.file(file.filename, content);
-            });
-            
-            // Add a README
-            const readmeContent = generateReadme(game);
-            folder.file("README.txt", readmeContent);
-            
-            // Generate the ZIP
-            const zipBlob = await zip.generateAsync({ 
-                type: 'blob',
-                compression: 'DEFLATE',
-                compressionOptions: { level: 9 }
-            });
-            
-            // Download
-            const url = URL.createObjectURL(zipBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${game.appId}_manifests.zip`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            URL.revokeObjectURL(url);
-        }
-
-        // Generate README content
-        function generateReadme(game) {
-            const timestamp = new Date().toISOString();
-            let content = `=============================================\n`;
-            content += `${game.name} - Steam Manifests\n`;
-            content += `Generated by SMGEN on ${timestamp}\n`;
-            content += `=============================================\n\n`;
-            
-            content += `INCLUDED FILES:\n`;
-            content += `---------------\n`;
-            game.files.forEach(file => {
-                content += `• ${file.filename} - ${file.description}\n`;
-            });
-            
-            content += `\nINSTALLATION:\n`;
-            content += `-------------\n`;
-            content += `1. Extract all .lua files from this archive\n`;
-            content += `2. Move them to: SteamTools/Manifests/\n`;
-            content += `3. Restart Steam\n`;
-            content += `4. The game should now be available to download\n\n`;
-            
-            if (game.requiresLauncher === 'rockstar') {
-                content += `IMPORTANT - ROCKSTAR GAMES:\n`;
-                content += `---------------------------\n`;
-                content += `This game requires the Rockstar Games Launcher.\n`;
-                content += `The launcher manifest (1628350.lua) is included.\n`;
-                content += `Make sure to install BOTH manifest files!\n\n`;
+        function downloadManifest(index) {
+            const game = games[index];
+            if (!game || game.unavailable) {
+                showToast('This game is currently unavailable', true);
+                return;
             }
-            
-            content += `=============================================\n`;
-            content += `App ID: ${game.appId}\n`;
-            content += `Total Files: ${game.files.length}\n`;
-            content += `=============================================\n`;
-            
-            return content;
-        }
 
-        // Main download function
-        async function downloadManifest(gameIndex) {
-            const game = games[gameIndex];
-            if (!game) return;
-
-            const btn = document.querySelector(`[data-game-index="${gameIndex}"]`);
+            const btn = document.querySelector(`[data-game-index="${index}"]`);
             
-            // Show loading state
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = `<div class="spinner"></div> Generating...`;
             }
 
-            try {
-                // Small delay for UX
-                await new Promise(resolve => setTimeout(resolve, 300));
-                
-                if (game.files.length === 1) {
-                    // Single file - direct download
-                    await downloadSingleFile(game);
+            setTimeout(() => {
+                try {
+                    const content = generateLuaContent(game);
+                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${game.appId}.lua`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    
+                    incrementDownload();
                     showToast(`${game.name} manifest downloaded!`);
-                } else {
-                    // Multiple files - ZIP download
-                    await downloadAsZip(game);
-                    showToast(`${game.name} manifests downloaded as ZIP!`);
+                    
+                    if (btn) {
+                        btn.classList.add('success');
+                        btn.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Done!
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Download error:', error);
+                    showToast('Error generating manifest', true);
+                    
+                    if (btn) {
+                        btn.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            Error
+                        `;
+                    }
                 }
                 
-                incrementDownload();
-                
-                // Success state
-                if (btn) {
-                    btn.classList.add('success');
-                    btn.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                        Downloaded!
-                    `;
-                }
-            } catch (error) {
-                console.error('Download error:', error);
-                showToast('Error generating manifest. Please try again.');
-                
-                if (btn) {
-                    btn.innerHTML = `
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                        Error
-                    `;
-                }
-            }
-            
-            // Reset button after delay
-            setTimeout(() => {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.classList.remove('success');
-                    const isZip = game.files.length > 1;
-                    btn.className = `download-btn${isZip ? ' zip-btn' : ''}`;
-                    btn.innerHTML = getDownloadButtonContent(game);
-                }
-            }, 2500);
+                setTimeout(() => {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.classList.remove('success');
+                        btn.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7,10 12,15 17,10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download
+                        `;
+                    }
+                }, 2500);
+            }, 400);
         }
 
-        // Get download button content
-        function getDownloadButtonContent(game) {
-            const isZip = game.files.length > 1;
-            if (isZip) {
-                return `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7,10 12,15 17,10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    ZIP
-                `;
-            }
-            return `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7,10 12,15 17,10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Download
-            `;
-        }
-
-        // Show toast notification
-        function showToast(message) {
+        function showToast(message, isError = false) {
             toastMessage.textContent = message;
+            toast.classList.toggle('error', isError);
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Download count management
         function getDownloadCount() {
             return parseInt(localStorage.getItem('smgenDownloads') || '0');
         }
@@ -1194,18 +1763,6 @@
             document.getElementById('download-count').textContent = count;
         }
 
-        // Get total depot count
-        function getTotalDepots() {
-            let total = 0;
-            games.forEach(game => {
-                game.files.forEach(file => {
-                    total += file.depots.length;
-                });
-            });
-            return total;
-        }
-
-        // Image helpers
         function getGameImage(appId) {
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg`;
         }
@@ -1214,33 +1771,38 @@
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
         }
 
-        // Render game card
         function renderGameCard(game, index) {
-            const isZip = game.files.length > 1;
-            const hasRockstar = game.requiresLauncher === 'rockstar';
-            const totalDepots = game.files.reduce((sum, f) => sum + f.depots.length, 0);
-            
-            // Generate file tags
-            const fileTags = game.files.map(file => {
-                const isLauncher = file.isLauncher;
-                return `<span class="file-tag${isLauncher ? ' launcher' : ''}">${file.filename}</span>`;
-            }).join('');
+            const isUnavailable = game.unavailable;
+            const depotCount = game.depots.length;
             
             return `
-                <div class="game-card">
-                    <img 
-                        class="game-image" 
-                        src="${getGameImage(game.appId)}" 
-                        alt="${game.name}"
-                        onerror="this.src='${getGameHeaderImage(game.appId)}'"
-                    >
+                <div class="game-card ${isUnavailable ? 'unavailable' : ''}">
+                    <div class="game-image-container">
+                        <img 
+                            class="game-image" 
+                            src="${getGameImage(game.appId)}" 
+                            alt="${game.name}"
+                            onerror="this.src='${getGameHeaderImage(game.appId)}'"
+                        >
+                        ${isUnavailable ? `
+                            <div class="unavailable-overlay">
+                                <div class="unavailable-badge">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                    </svg>
+                                    Unavailable
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
                     <div class="game-info">
                         <div class="game-title">
                             ${game.name}
                             <div class="game-badges">
-                                ${hasRockstar ? '<span class="badge badge-rockstar">R★</span>' : ''}
-                                ${isZip ? '<span class="badge badge-zip">ZIP</span>' : ''}
-                                ${game.files.length > 1 ? `<span class="badge badge-files">${game.files.length} files</span>` : ''}
+                                ${isUnavailable ? '<span class="badge badge-rockstar">R★</span>' : ''}
+                                ${isUnavailable ? '<span class="badge badge-unavailable">Unavailable</span>' : ''}
                             </div>
                         </div>
                         <div class="game-meta">
@@ -1250,15 +1812,32 @@
                             </div>
                             <div class="meta-item">
                                 <span class="meta-label">Depots:</span>
-                                <span class="depot-count">${totalDepots} depot${totalDepots > 1 ? 's' : ''}</span>
+                                <span class="depot-count">${depotCount} depot${depotCount > 1 ? 's' : ''}</span>
                             </div>
                         </div>
-                        <div class="file-list">
-                            ${fileTags}
-                        </div>
+                        ${isUnavailable ? `<p style="color: #f87171; font-size: 12px; margin-top: 8px;">${game.unavailableReason}</p>` : ''}
                     </div>
-                    <button class="download-btn${isZip ? ' zip-btn' : ''}" data-game-index="${index}" onclick="downloadManifest(${index})">
-                        ${getDownloadButtonContent(game)}
+                    <button 
+                        class="download-btn ${isUnavailable ? 'unavailable-btn' : ''}" 
+                        data-game-index="${index}" 
+                        onclick="${isUnavailable ? 'showToast(\'This game requires Rockstar Launcher and is unavailable\', true)' : `downloadManifest(${index})`}"
+                        ${isUnavailable ? '' : ''}
+                    >
+                        ${isUnavailable ? `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            Unavailable
+                        ` : `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7,10 12,15 17,10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download
+                        `}
                     </button>
                 </div>
             `;
@@ -1301,14 +1880,16 @@
             }
         }
 
-        // Initialize
-        searchInput.addEventListener('input', (e) => {
-            searchGames(e.target.value);
-        });
+        function getAvailableCount() {
+            return games.filter(g => !g.unavailable).length;
+        }
 
+        // Initialize
+        searchInput.addEventListener('input', (e) => searchGames(e.target.value));
+        
         renderAllGames();
         document.getElementById('game-count').textContent = games.length;
-        document.getElementById('depot-count').textContent = getTotalDepots();
+        document.getElementById('available-count').textContent = getAvailableCount();
         document.getElementById('download-count').textContent = getDownloadCount();
     </script>
 </body>

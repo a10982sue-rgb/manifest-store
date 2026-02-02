@@ -6,6 +6,8 @@
     <title>SMGEN - Steam Manifest Generator</title>
     <link rel="icon" href="https://store.steampowered.com/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- JSZip Library for ZIP creation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -233,6 +235,40 @@
             font-weight: 600;
             margin-bottom: 6px;
             color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-badges {
+            display: flex;
+            gap: 6px;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-rockstar {
+            background: linear-gradient(135deg, #fcaf17 0%, #f5a623 100%);
+            color: #000;
+        }
+
+        .badge-zip {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .badge-files {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .game-meta {
@@ -287,6 +323,8 @@
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
+            min-width: 140px;
+            justify-content: center;
         }
 
         .download-btn:hover {
@@ -298,6 +336,12 @@
             transform: scale(0.98);
         }
 
+        .download-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .download-btn svg {
             width: 16px;
             height: 16px;
@@ -305,6 +349,28 @@
 
         .download-btn.success {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .download-btn.zip-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .download-btn.zip-btn:hover {
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Spinner animation */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .instructions {
@@ -340,6 +406,24 @@
             font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
             font-size: 13px;
             color: #e4e4e7;
+        }
+
+        .instructions .note {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(252, 175, 23, 0.1);
+            border: 1px solid rgba(252, 175, 23, 0.2);
+            border-radius: 8px;
+            color: #fbbf24;
+            font-size: 13px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .instructions .note svg {
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .footer {
@@ -398,6 +482,7 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
         }
 
         .toast.show {
@@ -408,6 +493,31 @@
         .toast svg {
             width: 18px;
             height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* File list preview */
+        .file-list {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .file-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #a1a1aa;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+
+        .file-tag.launcher {
+            background: rgba(252, 175, 23, 0.1);
+            border-color: rgba(252, 175, 23, 0.2);
+            color: #fbbf24;
         }
 
         @media (max-width: 640px) {
@@ -432,7 +542,16 @@
                 text-align: center;
             }
 
+            .game-title {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
             .game-meta {
+                justify-content: center;
+            }
+
+            .file-list {
                 justify-content: center;
             }
 
@@ -470,7 +589,7 @@
     <main class="main">
         <div class="hero">
             <h1>Steam Manifest Library</h1>
-            <p>Search and download auto-generated game manifests. Fast, reliable, always updated.</p>
+            <p>Auto-generated manifests with Rockstar Launcher support. Downloads as ZIP when multiple files needed.</p>
         </div>
 
         <div class="stats">
@@ -511,10 +630,18 @@
             </h3>
             <ol>
                 <li>Search for your game using the search bar above</li>
-                <li>Click the download button to auto-generate the <code>.lua</code> file</li>
-                <li>Move the file to your <code>SteamTools/Manifests</code> folder</li>
+                <li>Click download - you'll get a <code>.lua</code> file or <code>.zip</code> if multiple files needed</li>
+                <li>Extract (if ZIP) and move all <code>.lua</code> files to <code>SteamTools/Manifests</code></li>
                 <li>Restart Steam and enjoy</li>
             </ol>
+            <div class="note">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span><strong>Rockstar Games:</strong> These require additional launcher manifests which are automatically included in the ZIP download.</span>
+            </div>
         </div>
     </main>
 
@@ -533,74 +660,305 @@
 
     <script>
         // =============================================
-        // GAME DATABASE - ADD YOUR GAMES HERE
+        // GAME DATABASE WITH MULTI-FILE SUPPORT
         // =============================================
-        // Each game can have multiple depots with their manifest IDs
-        // The generator will automatically create the proper .lua file
+        // Games can have multiple manifest files
+        // Rockstar games include launcher manifests
+        // Multiple files = automatic ZIP download
         
         const games = [
-            {
-                name: "Cyberpunk 2077",
-                appId: "1091500",
-                depots: [
-                    { depotId: "1091501", manifestId: "7561906995606504576", description: "Main Game" },
-                    { depotId: "1091502", manifestId: "8163827587320863538", description: "English Audio" }
-                ]
-            },
+            // =============================================
+            // ROCKSTAR GAMES (Include Launcher Manifests)
+            // =============================================
             {
                 name: "Grand Theft Auto V",
                 appId: "271590",
-                depots: [
-                    { depotId: "271591", manifestId: "7509048598561981671", description: "Main Game" },
-                    { depotId: "271592", manifestId: "4657685648790920807", description: "SP/MP Content" }
+                requiresLauncher: "rockstar",
+                files: [
+                    {
+                        filename: "271590.lua",
+                        description: "GTA V Main Game",
+                        appId: "271590",
+                        depots: [
+                            { depotId: "271591", manifestId: "7509048598561981671", description: "Main Content" },
+                            { depotId: "271592", manifestId: "4657685648790920807", description: "SP Content" },
+                            { depotId: "271593", manifestId: "6768546039266268538", description: "MP Content" },
+                            { depotId: "271594", manifestId: "3478530875040498786", description: "Additional Content" }
+                        ]
+                    },
+                    {
+                        filename: "1628350.lua",
+                        description: "Rockstar Games Launcher",
+                        appId: "1628350",
+                        isLauncher: true,
+                        depots: [
+                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
+                        ]
+                    }
                 ]
             },
             {
                 name: "Grand Theft Auto V: Enhanced",
                 appId: "3240220",
-                depots: [
-                    { depotId: "3240221", manifestId: "8906022740565578137", description: "Main Game" },
-                    { depotId: "3240222", manifestId: "3970075344364020879", description: "Additional Content" }
+                requiresLauncher: "rockstar",
+                files: [
+                    {
+                        filename: "3240220.lua",
+                        description: "GTA V Enhanced Main Game",
+                        appId: "3240220",
+                        depots: [
+                            { depotId: "3240221", manifestId: "8906022740565578137", description: "Main Content" },
+                            { depotId: "3240222", manifestId: "3970075344364020879", description: "Additional Content" },
+                            { depotId: "3240223", manifestId: "5765432198765432100", description: "Enhanced Assets" }
+                        ]
+                    },
+                    {
+                        filename: "1628350.lua",
+                        description: "Rockstar Games Launcher",
+                        appId: "1628350",
+                        isLauncher: true,
+                        depots: [
+                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
+                        ]
+                    }
                 ]
             },
             {
                 name: "Red Dead Redemption 2",
                 appId: "1174180",
-                depots: [
-                    { depotId: "1174181", manifestId: "8477312052549849498", description: "Main Game" },
-                    { depotId: "1174182", manifestId: "7705639971523638103", description: "Game Content" }
+                requiresLauncher: "rockstar",
+                files: [
+                    {
+                        filename: "1174180.lua",
+                        description: "RDR2 Main Game",
+                        appId: "1174180",
+                        depots: [
+                            { depotId: "1174181", manifestId: "8477312052549849498", description: "Main Content" },
+                            { depotId: "1174182", manifestId: "7705639971523638103", description: "Game Assets" },
+                            { depotId: "1174183", manifestId: "4823598347598347598", description: "Audio Content" },
+                            { depotId: "1174184", manifestId: "9384756928475692847", description: "Video Content" }
+                        ]
+                    },
+                    {
+                        filename: "1628350.lua",
+                        description: "Rockstar Games Launcher",
+                        appId: "1628350",
+                        isLauncher: true,
+                        depots: [
+                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "L.A. Noire",
+                appId: "110800",
+                requiresLauncher: "rockstar",
+                files: [
+                    {
+                        filename: "110800.lua",
+                        description: "L.A. Noire Main Game",
+                        appId: "110800",
+                        depots: [
+                            { depotId: "110801", manifestId: "1234567890123456789", description: "Main Content" },
+                            { depotId: "110802", manifestId: "9876543210987654321", description: "Game Files" }
+                        ]
+                    },
+                    {
+                        filename: "1628350.lua",
+                        description: "Rockstar Games Launcher",
+                        appId: "1628350",
+                        isLauncher: true,
+                        depots: [
+                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Max Payne 3",
+                appId: "204100",
+                requiresLauncher: "rockstar",
+                files: [
+                    {
+                        filename: "204100.lua",
+                        description: "Max Payne 3 Main Game",
+                        appId: "204100",
+                        depots: [
+                            { depotId: "204101", manifestId: "5678901234567890123", description: "Main Content" },
+                            { depotId: "204102", manifestId: "3210987654321098765", description: "Game Files" }
+                        ]
+                    },
+                    {
+                        filename: "1628350.lua",
+                        description: "Rockstar Games Launcher",
+                        appId: "1628350",
+                        isLauncher: true,
+                        depots: [
+                            { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher Files" }
+                        ]
+                    }
+                ]
+            },
+            
+            // =============================================
+            // OTHER GAMES (Single File Downloads)
+            // =============================================
+            {
+                name: "Cyberpunk 2077",
+                appId: "1091500",
+                files: [
+                    {
+                        filename: "1091500.lua",
+                        description: "Cyberpunk 2077 Main Game",
+                        appId: "1091500",
+                        depots: [
+                            { depotId: "1091501", manifestId: "7561906995606504576", description: "Main Content" },
+                            { depotId: "1091502", manifestId: "8163827587320863538", description: "Content" },
+                            { depotId: "1091503", manifestId: "4397528629033540346", description: "Movies" },
+                            { depotId: "1091504", manifestId: "3892347892374892374", description: "DLC Content" }
+                        ]
+                    }
                 ]
             },
             {
                 name: "Elden Ring",
                 appId: "1245620",
-                depots: [
-                    { depotId: "1245621", manifestId: "6793002322587498957", description: "Main Game" }
+                files: [
+                    {
+                        filename: "1245620.lua",
+                        description: "Elden Ring Main Game",
+                        appId: "1245620",
+                        depots: [
+                            { depotId: "1245621", manifestId: "6793002322587498957", description: "Main Content" },
+                            { depotId: "1245622", manifestId: "2938475629384756293", description: "Game Data" }
+                        ]
+                    }
                 ]
             },
             {
                 name: "Hogwarts Legacy",
                 appId: "990080",
-                depots: [
-                    { depotId: "990081", manifestId: "3689607233666352456", description: "Main Game" },
-                    { depotId: "990082", manifestId: "5765321543234567890", description: "Additional Content" }
+                files: [
+                    {
+                        filename: "990080.lua",
+                        description: "Hogwarts Legacy Main Game",
+                        appId: "990080",
+                        depots: [
+                            { depotId: "990081", manifestId: "3689607233666352456", description: "Main Content" },
+                            { depotId: "990082", manifestId: "5765321543234567890", description: "Additional Content" },
+                            { depotId: "990083", manifestId: "8765432198765432198", description: "Texture Pack" }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Baldur's Gate 3",
+                appId: "1086940",
+                files: [
+                    {
+                        filename: "1086940.lua",
+                        description: "Baldur's Gate 3 Main Game",
+                        appId: "1086940",
+                        depots: [
+                            { depotId: "1086941", manifestId: "4839274839274839274", description: "Main Content" },
+                            { depotId: "1086942", manifestId: "9283749283749283749", description: "Game Assets" }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "God of War",
+                appId: "1593500",
+                files: [
+                    {
+                        filename: "1593500.lua",
+                        description: "God of War Main Game",
+                        appId: "1593500",
+                        depots: [
+                            { depotId: "1593501", manifestId: "7482918374829183748", description: "Main Content" }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Spider-Man Remastered",
+                appId: "1817070",
+                files: [
+                    {
+                        filename: "1817070.lua",
+                        description: "Spider-Man Remastered Main Game",
+                        appId: "1817070",
+                        depots: [
+                            { depotId: "1817071", manifestId: "5839274839274839274", description: "Main Content" },
+                            { depotId: "1817072", manifestId: "1928374829182938472", description: "DLC Content" }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Spider-Man: Miles Morales",
+                appId: "1817190",
+                files: [
+                    {
+                        filename: "1817190.lua",
+                        description: "Miles Morales Main Game",
+                        appId: "1817190",
+                        depots: [
+                            { depotId: "1817191", manifestId: "6748392748392748392", description: "Main Content" }
+                        ]
+                    }
                 ]
             }
+            
             // =============================================
-            // ADD MORE GAMES BELOW - COPY THIS FORMAT:
+            // ADD MORE GAMES - COPY THIS FORMAT:
             // =============================================
+            // For single-file games:
             // ,{
-            //     name: "Game Name Here",
+            //     name: "Game Name",
             //     appId: "XXXXXX",
-            //     depots: [
-            //         { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "Main Game" },
-            //         { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "DLC/Content" }
+            //     files: [
+            //         {
+            //             filename: "XXXXXX.lua",
+            //             description: "Game Description",
+            //             appId: "XXXXXX",
+            //             depots: [
+            //                 { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "Content" }
+            //             ]
+            //         }
+            //     ]
+            // }
+            //
+            // For Rockstar games (adds launcher automatically):
+            // ,{
+            //     name: "Rockstar Game Name",
+            //     appId: "XXXXXX",
+            //     requiresLauncher: "rockstar",
+            //     files: [
+            //         {
+            //             filename: "XXXXXX.lua",
+            //             description: "Game Description",
+            //             appId: "XXXXXX",
+            //             depots: [
+            //                 { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "Content" }
+            //             ]
+            //         },
+            //         {
+            //             filename: "1628350.lua",
+            //             description: "Rockstar Games Launcher",
+            //             appId: "1628350",
+            //             isLauncher: true,
+            //             depots: [
+            //                 { depotId: "1628351", manifestId: "5765209778498739498", description: "Launcher" }
+            //             ]
+            //         }
             //     ]
             // }
         ];
 
         // =============================================
-        // MANIFEST GENERATOR - DO NOT EDIT BELOW
+        // MANIFEST GENERATOR ENGINE
         // =============================================
 
         const searchInput = document.getElementById('searchInput');
@@ -608,92 +966,212 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
 
-        // Generate Lua manifest content
-        function generateManifestContent(game) {
+        // Generate Lua manifest content for a single file
+        function generateLuaContent(file) {
             const timestamp = new Date().toISOString();
             let content = `-- =============================================\n`;
-            content += `-- ${game.name}\n`;
-            content += `-- App ID: ${game.appId}\n`;
+            content += `-- ${file.description}\n`;
+            content += `-- App ID: ${file.appId}\n`;
             content += `-- Generated by SMGEN on ${timestamp}\n`;
             content += `-- =============================================\n\n`;
             
             // Add app registration
-            content += `addappid(${game.appId}, 1, "${game.name}")\n\n`;
+            content += `addappid(${file.appId}, 1, "${file.description}")\n\n`;
             
             // Add all depot manifests
             content += `-- Depot Manifests\n`;
-            game.depots.forEach(depot => {
+            file.depots.forEach(depot => {
                 content += `-- ${depot.description || 'Content'}\n`;
-                content += `addappid(${depot.depotId}, 1, "${game.name}")\n`;
+                content += `addappid(${depot.depotId}, 1, "${file.description}")\n`;
                 content += `setManifestid(${depot.depotId}, "${depot.manifestId}")\n\n`;
             });
 
             return content;
         }
 
-        // Alternative format (GreenLuma style)
-        function generateGreenLumaContent(game) {
-            let content = '';
-            content += `; ${game.name}\n`;
-            content += `; Generated by SMGEN\n\n`;
-            content += `[${game.appId}]\n`;
-            game.depots.forEach(depot => {
-                content += `${depot.depotId}=${depot.manifestId}\n`;
-            });
-            return content;
-        }
-
-        // Download the generated manifest
-        function downloadManifest(gameIndex) {
-            const game = games[gameIndex];
-            if (!game) return;
-
-            // Generate the Lua content
-            const content = generateManifestContent(game);
+        // Download single file
+        function downloadSingleFile(game) {
+            const file = game.files[0];
+            const content = generateLuaContent(file);
             
-            // Create blob and download
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             
             const link = document.createElement('a');
             link.href = url;
-            link.download = `${game.appId}.lua`;
+            link.download = file.filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            // Clean up
             URL.revokeObjectURL(url);
             
-            // Update download count
-            incrementDownload();
+            return Promise.resolve();
+        }
+
+        // Download multiple files as ZIP
+        async function downloadAsZip(game) {
+            const zip = new JSZip();
             
-            // Show success toast
-            showToast(`${game.name} manifest downloaded!`);
+            // Create a folder with the game name
+            const folderName = `${game.name.replace(/[^a-zA-Z0-9]/g, '_')}_Manifests`;
+            const folder = zip.folder(folderName);
             
-            // Visual feedback on button
+            // Add each file to the ZIP
+            game.files.forEach(file => {
+                const content = generateLuaContent(file);
+                folder.file(file.filename, content);
+            });
+            
+            // Add a README
+            const readmeContent = generateReadme(game);
+            folder.file("README.txt", readmeContent);
+            
+            // Generate the ZIP
+            const zipBlob = await zip.generateAsync({ 
+                type: 'blob',
+                compression: 'DEFLATE',
+                compressionOptions: { level: 9 }
+            });
+            
+            // Download
+            const url = URL.createObjectURL(zipBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${game.appId}_manifests.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            URL.revokeObjectURL(url);
+        }
+
+        // Generate README content
+        function generateReadme(game) {
+            const timestamp = new Date().toISOString();
+            let content = `=============================================\n`;
+            content += `${game.name} - Steam Manifests\n`;
+            content += `Generated by SMGEN on ${timestamp}\n`;
+            content += `=============================================\n\n`;
+            
+            content += `INCLUDED FILES:\n`;
+            content += `---------------\n`;
+            game.files.forEach(file => {
+                content += `• ${file.filename} - ${file.description}\n`;
+            });
+            
+            content += `\nINSTALLATION:\n`;
+            content += `-------------\n`;
+            content += `1. Extract all .lua files from this archive\n`;
+            content += `2. Move them to: SteamTools/Manifests/\n`;
+            content += `3. Restart Steam\n`;
+            content += `4. The game should now be available to download\n\n`;
+            
+            if (game.requiresLauncher === 'rockstar') {
+                content += `IMPORTANT - ROCKSTAR GAMES:\n`;
+                content += `---------------------------\n`;
+                content += `This game requires the Rockstar Games Launcher.\n`;
+                content += `The launcher manifest (1628350.lua) is included.\n`;
+                content += `Make sure to install BOTH manifest files!\n\n`;
+            }
+            
+            content += `=============================================\n`;
+            content += `App ID: ${game.appId}\n`;
+            content += `Total Files: ${game.files.length}\n`;
+            content += `=============================================\n`;
+            
+            return content;
+        }
+
+        // Main download function
+        async function downloadManifest(gameIndex) {
+            const game = games[gameIndex];
+            if (!game) return;
+
             const btn = document.querySelector(`[data-game-index="${gameIndex}"]`);
+            
+            // Show loading state
             if (btn) {
-                btn.classList.add('success');
-                btn.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                    Downloaded
-                `;
-                setTimeout(() => {
-                    btn.classList.remove('success');
+                btn.disabled = true;
+                btn.innerHTML = `<div class="spinner"></div> Generating...`;
+            }
+
+            try {
+                // Small delay for UX
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                if (game.files.length === 1) {
+                    // Single file - direct download
+                    await downloadSingleFile(game);
+                    showToast(`${game.name} manifest downloaded!`);
+                } else {
+                    // Multiple files - ZIP download
+                    await downloadAsZip(game);
+                    showToast(`${game.name} manifests downloaded as ZIP!`);
+                }
+                
+                incrementDownload();
+                
+                // Success state
+                if (btn) {
+                    btn.classList.add('success');
                     btn.innerHTML = `
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7,10 12,15 17,10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
                         </svg>
-                        Download
+                        Downloaded!
                     `;
-                }, 2000);
+                }
+            } catch (error) {
+                console.error('Download error:', error);
+                showToast('Error generating manifest. Please try again.');
+                
+                if (btn) {
+                    btn.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Error
+                    `;
+                }
             }
+            
+            // Reset button after delay
+            setTimeout(() => {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('success');
+                    const isZip = game.files.length > 1;
+                    btn.className = `download-btn${isZip ? ' zip-btn' : ''}`;
+                    btn.innerHTML = getDownloadButtonContent(game);
+                }
+            }, 2500);
+        }
+
+        // Get download button content
+        function getDownloadButtonContent(game) {
+            const isZip = game.files.length > 1;
+            if (isZip) {
+                return `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7,10 12,15 17,10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    ZIP
+                `;
+            }
+            return `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7,10 12,15 17,10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download
+            `;
         }
 
         // Show toast notification
@@ -718,7 +1196,13 @@
 
         // Get total depot count
         function getTotalDepots() {
-            return games.reduce((total, game) => total + game.depots.length, 0);
+            let total = 0;
+            games.forEach(game => {
+                game.files.forEach(file => {
+                    total += file.depots.length;
+                });
+            });
+            return total;
         }
 
         // Image helpers
@@ -732,8 +1216,15 @@
 
         // Render game card
         function renderGameCard(game, index) {
-            const depotList = game.depots.map(d => d.depotId).join(', ');
-            const firstManifest = game.depots[0]?.manifestId || 'N/A';
+            const isZip = game.files.length > 1;
+            const hasRockstar = game.requiresLauncher === 'rockstar';
+            const totalDepots = game.files.reduce((sum, f) => sum + f.depots.length, 0);
+            
+            // Generate file tags
+            const fileTags = game.files.map(file => {
+                const isLauncher = file.isLauncher;
+                return `<span class="file-tag${isLauncher ? ' launcher' : ''}">${file.filename}</span>`;
+            }).join('');
             
             return `
                 <div class="game-card">
@@ -744,7 +1235,14 @@
                         onerror="this.src='${getGameHeaderImage(game.appId)}'"
                     >
                     <div class="game-info">
-                        <div class="game-title">${game.name}</div>
+                        <div class="game-title">
+                            ${game.name}
+                            <div class="game-badges">
+                                ${hasRockstar ? '<span class="badge badge-rockstar">R★</span>' : ''}
+                                ${isZip ? '<span class="badge badge-zip">ZIP</span>' : ''}
+                                ${game.files.length > 1 ? `<span class="badge badge-files">${game.files.length} files</span>` : ''}
+                            </div>
+                        </div>
                         <div class="game-meta">
                             <div class="meta-item">
                                 <span class="meta-label">App ID:</span>
@@ -752,21 +1250,15 @@
                             </div>
                             <div class="meta-item">
                                 <span class="meta-label">Depots:</span>
-                                <span class="depot-count">${game.depots.length} depot${game.depots.length > 1 ? 's' : ''}</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">IDs:</span>
-                                <span class="meta-value">${depotList}</span>
+                                <span class="depot-count">${totalDepots} depot${totalDepots > 1 ? 's' : ''}</span>
                             </div>
                         </div>
+                        <div class="file-list">
+                            ${fileTags}
+                        </div>
                     </div>
-                    <button class="download-btn" data-game-index="${index}" onclick="downloadManifest(${index})">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7,10 12,15 17,10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        Download
+                    <button class="download-btn${isZip ? ' zip-btn' : ''}" data-game-index="${index}" onclick="downloadManifest(${index})">
+                        ${getDownloadButtonContent(game)}
                     </button>
                 </div>
             `;

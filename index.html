@@ -477,18 +477,20 @@
         function generateLuaContent(game) {
             let content = '';
 
+            // 1. Add Main App ID line
+            content += `addappid(${game.appId}) -- ${game.name}\n`;
+
+            // 2. Add Depot lines
             if (game.depots && game.depots.length > 0) {
                 game.depots.forEach((d, index) => {
                     if (d.depotId && d.manifestId && d.manifestId !== 'NEEDS_REAL_ID') {
-                        // Use Game Name for the first depot comment, "Depot X" for others to match style
-                        const comment = index === 0 ? game.name : `Depot ${d.depotId}`;
-                        content += `addappid(${d.depotId}, 1, "${d.manifestId}") -- ${comment}\n`;
+                        // Format: addappid(depotId, 0, "manifestId") -- Depot N (depotId_manifestId.manifest)
+                        content += `addappid(${d.depotId},0,"${d.manifestId}") -- Depot ${index + 1} (${d.depotId}_${d.manifestId}.manifest)\n`;
                     }
                 });
             }
             
-            content += `\n-- Made with love by LightningFast⚡💜`;
-            
+            // No footer credits as requested
             return content;
         }
 

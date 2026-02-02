@@ -263,6 +263,15 @@
             font-size: 12px;
         }
 
+        .depot-count {
+            background: rgba(26, 159, 255, 0.15);
+            color: #1a9fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
         .download-btn {
             padding: 12px 24px;
             background: linear-gradient(135deg, #1a9fff 0%, #0d7fd4 100%);
@@ -285,9 +294,17 @@
             box-shadow: 0 6px 24px rgba(26, 159, 255, 0.4);
         }
 
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
         .download-btn svg {
             width: 16px;
             height: 16px;
+        }
+
+        .download-btn.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
 
         .instructions {
@@ -362,6 +379,37 @@
             margin-top: 4px;
         }
 
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(16, 185, 129, 0.95);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
+        }
+
         @media (max-width: 640px) {
             .header {
                 padding: 16px 20px;
@@ -422,21 +470,21 @@
     <main class="main">
         <div class="hero">
             <h1>Steam Manifest Library</h1>
-            <p>Search and download game manifests. Fast, reliable, always updated.</p>
+            <p>Search and download auto-generated game manifests. Fast, reliable, always updated.</p>
         </div>
 
         <div class="stats">
             <div class="stat">
-                <div class="stat-value" id="game-count">4</div>
+                <div class="stat-value" id="game-count">0</div>
                 <div class="stat-label">Games</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="depot-count">0</div>
+                <div class="stat-label">Depots</div>
             </div>
             <div class="stat">
                 <div class="stat-value" id="download-count">0</div>
                 <div class="stat-label">Downloads</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="last-updated">—</div>
-                <div class="stat-label">Updated</div>
             </div>
         </div>
 
@@ -463,8 +511,8 @@
             </h3>
             <ol>
                 <li>Search for your game using the search bar above</li>
-                <li>Click the download button to get the <code>.lua</code> file</li>
-                <li>Move the file to your <code>SteamTools/Config</code> folder</li>
+                <li>Click the download button to auto-generate the <code>.lua</code> file</li>
+                <li>Move the file to your <code>SteamTools/Manifests</code> folder</li>
                 <li>Restart Steam and enjoy</li>
             </ol>
         </div>
@@ -474,59 +522,190 @@
         SMGEN · Not affiliated with Steam or Valve Corporation
     </footer>
 
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span id="toast-message">Manifest downloaded!</span>
+    </div>
+
     <script>
         // =============================================
         // GAME DATABASE - ADD YOUR GAMES HERE
         // =============================================
+        // Each game can have multiple depots with their manifest IDs
+        // The generator will automatically create the proper .lua file
+        
         const games = [
             {
                 name: "Cyberpunk 2077",
                 appId: "1091500",
-                manifestId: "7561906995606504576",
-                depotId: "1091501",
-                downloadFile: "1091500.lua"
+                depots: [
+                    { depotId: "1091501", manifestId: "7561906995606504576", description: "Main Game" },
+                    { depotId: "1091502", manifestId: "8163827587320863538", description: "English Audio" }
+                ]
             },
             {
                 name: "Grand Theft Auto V",
                 appId: "271590",
-                manifestId: "7509048598561981671",
-                depotId: "271591",
-                downloadFile: "271590.lua"
+                depots: [
+                    { depotId: "271591", manifestId: "7509048598561981671", description: "Main Game" },
+                    { depotId: "271592", manifestId: "4657685648790920807", description: "SP/MP Content" }
+                ]
             },
             {
                 name: "Grand Theft Auto V: Enhanced",
                 appId: "3240220",
-                manifestId: "5765209778498739498",  // Update this with correct manifest from SteamDB
-                depotId: "3240221",                  // Main content depot
-                downloadFile: "3240220.lua"
+                depots: [
+                    { depotId: "3240221", manifestId: "8906022740565578137", description: "Main Game" },
+                    { depotId: "3240222", manifestId: "3970075344364020879", description: "Additional Content" }
+                ]
             },
             {
                 name: "Red Dead Redemption 2",
                 appId: "1174180",
-                manifestId: "8477312052549849498",
-                depotId: "1174181",
-                downloadFile: "1174180.lua"
+                depots: [
+                    { depotId: "1174181", manifestId: "8477312052549849498", description: "Main Game" },
+                    { depotId: "1174182", manifestId: "7705639971523638103", description: "Game Content" }
+                ]
+            },
+            {
+                name: "Elden Ring",
+                appId: "1245620",
+                depots: [
+                    { depotId: "1245621", manifestId: "6793002322587498957", description: "Main Game" }
+                ]
+            },
+            {
+                name: "Hogwarts Legacy",
+                appId: "990080",
+                depots: [
+                    { depotId: "990081", manifestId: "3689607233666352456", description: "Main Game" },
+                    { depotId: "990082", manifestId: "5765321543234567890", description: "Additional Content" }
+                ]
             }
-            // To add more games, copy the format below:
+            // =============================================
+            // ADD MORE GAMES BELOW - COPY THIS FORMAT:
+            // =============================================
             // ,{
             //     name: "Game Name Here",
             //     appId: "XXXXXX",
-            //     manifestId: "XXXXXXXXXXXXXXXXXX",
-            //     depotId: "XXXXXX",
-            //     downloadFile: "XXXXXX.lua"
+            //     depots: [
+            //         { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "Main Game" },
+            //         { depotId: "XXXXXX", manifestId: "XXXXXXXXXXXXXXXXXX", description: "DLC/Content" }
+            //     ]
             // }
         ];
 
-        // Change this date when you update the store
-        const lastUpdated = "2025-01-15";
-
         // =============================================
-        // DO NOT EDIT BELOW THIS LINE
+        // MANIFEST GENERATOR - DO NOT EDIT BELOW
         // =============================================
 
         const searchInput = document.getElementById('searchInput');
         const resultsContainer = document.getElementById('results');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
 
+        // Generate Lua manifest content
+        function generateManifestContent(game) {
+            const timestamp = new Date().toISOString();
+            let content = `-- =============================================\n`;
+            content += `-- ${game.name}\n`;
+            content += `-- App ID: ${game.appId}\n`;
+            content += `-- Generated by SMGEN on ${timestamp}\n`;
+            content += `-- =============================================\n\n`;
+            
+            // Add app registration
+            content += `addappid(${game.appId}, 1, "${game.name}")\n\n`;
+            
+            // Add all depot manifests
+            content += `-- Depot Manifests\n`;
+            game.depots.forEach(depot => {
+                content += `-- ${depot.description || 'Content'}\n`;
+                content += `addappid(${depot.depotId}, 1, "${game.name}")\n`;
+                content += `setManifestid(${depot.depotId}, "${depot.manifestId}")\n\n`;
+            });
+
+            return content;
+        }
+
+        // Alternative format (GreenLuma style)
+        function generateGreenLumaContent(game) {
+            let content = '';
+            content += `; ${game.name}\n`;
+            content += `; Generated by SMGEN\n\n`;
+            content += `[${game.appId}]\n`;
+            game.depots.forEach(depot => {
+                content += `${depot.depotId}=${depot.manifestId}\n`;
+            });
+            return content;
+        }
+
+        // Download the generated manifest
+        function downloadManifest(gameIndex) {
+            const game = games[gameIndex];
+            if (!game) return;
+
+            // Generate the Lua content
+            const content = generateManifestContent(game);
+            
+            // Create blob and download
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${game.appId}.lua`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+            
+            // Update download count
+            incrementDownload();
+            
+            // Show success toast
+            showToast(`${game.name} manifest downloaded!`);
+            
+            // Visual feedback on button
+            const btn = document.querySelector(`[data-game-index="${gameIndex}"]`);
+            if (btn) {
+                btn.classList.add('success');
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Downloaded
+                `;
+                setTimeout(() => {
+                    btn.classList.remove('success');
+                    btn.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7,10 12,15 17,10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download
+                    `;
+                }, 2000);
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Download count management
         function getDownloadCount() {
             return parseInt(localStorage.getItem('smgenDownloads') || '0');
         }
@@ -537,13 +716,12 @@
             document.getElementById('download-count').textContent = count;
         }
 
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${months[date.getMonth()]} ${date.getDate()}`;
+        // Get total depot count
+        function getTotalDepots() {
+            return games.reduce((total, game) => total + game.depots.length, 0);
         }
 
+        // Image helpers
         function getGameImage(appId) {
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg`;
         }
@@ -552,7 +730,11 @@
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
         }
 
-        function renderGameCard(game) {
+        // Render game card
+        function renderGameCard(game, index) {
+            const depotList = game.depots.map(d => d.depotId).join(', ');
+            const firstManifest = game.depots[0]?.manifestId || 'N/A';
+            
             return `
                 <div class="game-card">
                     <img 
@@ -569,23 +751,23 @@
                                 <span class="meta-value">${game.appId}</span>
                             </div>
                             <div class="meta-item">
-                                <span class="meta-label">Depot:</span>
-                                <span class="meta-value">${game.depotId}</span>
+                                <span class="meta-label">Depots:</span>
+                                <span class="depot-count">${game.depots.length} depot${game.depots.length > 1 ? 's' : ''}</span>
                             </div>
                             <div class="meta-item">
-                                <span class="meta-label">Manifest:</span>
-                                <span class="meta-value">${game.manifestId}</span>
+                                <span class="meta-label">IDs:</span>
+                                <span class="meta-value">${depotList}</span>
                             </div>
                         </div>
                     </div>
-                    <a href="${game.downloadFile}" download class="download-btn" onclick="incrementDownload()">
+                    <button class="download-btn" data-game-index="${index}" onclick="downloadManifest(${index})">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7,10 12,15 17,10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
                         Download
-                    </a>
+                    </button>
                 </div>
             `;
         }
@@ -600,7 +782,7 @@
         }
 
         function renderAllGames() {
-            resultsContainer.innerHTML = games.map(renderGameCard).join('');
+            resultsContainer.innerHTML = games.map((game, index) => renderGameCard(game, index)).join('');
         }
 
         function searchGames(query) {
@@ -611,26 +793,31 @@
                 return;
             }
 
-            const filtered = games.filter(game => 
-                game.name.toLowerCase().includes(normalizedQuery) ||
-                game.appId.includes(normalizedQuery)
-            );
+            const filtered = games
+                .map((game, index) => ({ game, index }))
+                .filter(({ game }) => 
+                    game.name.toLowerCase().includes(normalizedQuery) ||
+                    game.appId.includes(normalizedQuery)
+                );
 
             if (filtered.length === 0) {
                 resultsContainer.innerHTML = renderNoResults(query);
             } else {
-                resultsContainer.innerHTML = filtered.map(renderGameCard).join('');
+                resultsContainer.innerHTML = filtered
+                    .map(({ game, index }) => renderGameCard(game, index))
+                    .join('');
             }
         }
 
+        // Initialize
         searchInput.addEventListener('input', (e) => {
             searchGames(e.target.value);
         });
 
         renderAllGames();
         document.getElementById('game-count').textContent = games.length;
+        document.getElementById('depot-count').textContent = getTotalDepots();
         document.getElementById('download-count').textContent = getDownloadCount();
-        document.getElementById('last-updated').textContent = formatDate(lastUpdated);
     </script>
 </body>
 </html>

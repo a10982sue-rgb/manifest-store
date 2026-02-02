@@ -17,6 +17,10 @@
         .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #1a9fff 0%, #0d5c8f 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(26,159,255,0.3); }
         .logo-icon svg { width: 24px; height: 24px; fill: white; }
         .logo-text { font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #1a9fff 0%, #66c0f4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .discord-btn { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #5865F2; color: white; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+        .discord-btn:hover { background: #4752c4; transform: translateY(-1px); }
+        .discord-btn svg { width: 18px; height: 18px; }
         .vip-badge { background: linear-gradient(135deg, #1a9fff 0%, #66c0f4 100%); color: #0a0a0f; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .main { position: relative; z-index: 10; max-width: 1000px; margin: 0 auto; padding: 60px 24px; }
         .hero { text-align: center; margin-bottom: 40px; }
@@ -26,92 +30,191 @@
         .stat { text-align: center; }
         .stat-value { font-size: 24px; font-weight: 700; color: #fff; }
         .stat-label { font-size: 10px; color: #52525b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+        
+        /* Tab Navigation */
+        .tab-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .tab-btn { padding: 12px 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #a1a1aa; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: inherit; display: flex; align-items: center; gap: 8px; }
+        .tab-btn:hover { background: rgba(255,255,255,0.06); }
+        .tab-btn.active { background: rgba(26,159,255,0.15); border-color: rgba(26,159,255,0.4); color: #1a9fff; }
+        .tab-btn svg { width: 18px; height: 18px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         .search-container { margin-bottom: 25px; }
         .search-box { position: relative; max-width: 500px; margin: 0 auto; }
-        .search-input { width: 100%; padding: 16px 20px 16px 50px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e4e4e7; font-size: 15px; outline: none; transition: all 0.3s; }
+        .search-input { width: 100%; padding: 16px 20px 16px 50px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e4e4e7; font-size: 15px; outline: none; transition: all 0.3s; font-family: inherit; }
         .search-input:focus { border-color: rgba(26,159,255,0.5); background: rgba(255,255,255,0.05); box-shadow: 0 0 0 4px rgba(26,159,255,0.1); }
         .search-input::placeholder { color: #52525b; }
         .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #52525b; }
+        
         .section-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .section-tab { padding: 8px 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #a1a1aa; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
+        .section-tab { padding: 8px 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #a1a1aa; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px; font-family: inherit; }
         .section-tab:hover { background: rgba(255,255,255,0.06); }
         .section-tab.active { background: rgba(26,159,255,0.15); border-color: rgba(26,159,255,0.4); color: #1a9fff; }
         .section-tab .count { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 8px; font-size: 10px; }
         .section-tab.active .count { background: rgba(26,159,255,0.3); }
         .section-tab[data-section="valve"] { border-left: 3px solid #1a9fff; }
-        .section-tab[data-section="rockstar"] { border-left: 3px solid #ef4444; }
-        .section-tab[data-section="ea"] { border-left: 3px solid #ff6b35; }
-        .section-tab[data-section="ubisoft"] { border-left: 3px solid #0070ff; }
         .section-tab[data-section="denuvo"] { border-left: 3px solid #f59e0b; }
         .section-tab[data-section="drm-free"] { border-left: 3px solid #10b981; }
+        .section-tab[data-section="custom"] { border-left: 3px solid #8b5cf6; }
         .section-tab[data-section="unavailable"] { border-left: 3px solid #ef4444; }
+
         .results { display: flex; flex-direction: column; gap: 10px; }
         .results-info { text-align: center; color: #52525b; font-size: 13px; margin-bottom: 15px; }
         .results-info strong { color: #1a9fff; }
         .no-results { text-align: center; padding: 60px 20px; color: #52525b; }
+        
         .game-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 14px; transition: all 0.3s; }
         .game-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(26,159,255,0.3); transform: translateY(-1px); }
         .game-card.unavailable { opacity: 0.6; border-color: rgba(239,68,68,0.2); }
-        .game-card.unavailable:hover { border-color: rgba(239,68,68,0.4); transform: none; }
         .game-card.denuvo-game { border-left: 3px solid #f59e0b; }
         .game-card.valve-game { border-left: 3px solid #1a9fff; }
         .game-card.drm-free-game { border-left: 3px solid #10b981; }
+        .game-card.custom-game { border-left: 3px solid #8b5cf6; }
+        
         .game-image-container { position: relative; flex-shrink: 0; }
-        .game-image { width: 120px; height: 45px; border-radius: 6px; object-fit: cover; background: #1a1a24; }
+        .game-image { width: 120px; height: 45px; border-radius: 6px; object-fit: cover; background: linear-gradient(135deg, #1a1a24 0%, #2a2a3a 100%); }
+        .game-image-placeholder { width: 120px; height: 45px; border-radius: 6px; background: linear-gradient(135deg, #1a1a24 0%, #2a2a3a 100%); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #52525b; text-align: center; padding: 4px; }
         .unavailable-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .unavailable-badge-img { background: #ef4444; color: white; padding: 3px 8px; border-radius: 10px; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+        
         .game-info { flex: 1; min-width: 0; }
         .game-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
         .game-badges { display: flex; gap: 4px; flex-wrap: wrap; }
         .badge { padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
         .badge-valve { background: linear-gradient(135deg, #1a9fff, #66c0f4); color: #000; }
-        .badge-rockstar { background: #ef4444; color: #fff; }
-        .badge-ea { background: #ff6b35; color: #fff; }
-        .badge-ubisoft { background: #0070ff; color: #fff; }
         .badge-denuvo { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; }
         .badge-drm-free { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+        .badge-custom { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #fff; }
         .badge-unavailable { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
-        .game-meta { display: flex; gap: 12px; font-size: 11px; color: #71717a; }
+        .badge-verified { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+        
+        .game-meta { display: flex; gap: 12px; font-size: 11px; color: #71717a; flex-wrap: wrap; }
         .meta-value { color: #a1a1aa; font-family: monospace; background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 3px; font-size: 10px; }
-        .download-btn { padding: 10px 18px; background: linear-gradient(135deg, #1a9fff, #0d7fd4); color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        
+        .game-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .download-btn { padding: 10px 18px; background: linear-gradient(135deg, #1a9fff, #0d7fd4); color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; }
         .download-btn:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(26,159,255,0.4); }
         .download-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         .download-btn.unavailable-btn { background: #374151; cursor: not-allowed; }
-        .download-btn.unavailable-btn:hover { transform: none; box-shadow: none; }
+        .download-btn.denuvo-btn { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .download-btn.success { background: linear-gradient(135deg, #10b981, #059669); }
         .download-btn svg { width: 14px; height: 14px; }
+        .delete-btn { padding: 10px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; color: #f87171; cursor: pointer; transition: all 0.3s; }
+        .delete-btn:hover { background: rgba(239,68,68,0.2); }
+        .delete-btn svg { width: 14px; height: 14px; }
+        
         .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .load-more { display: block; width: 100%; padding: 14px; margin-top: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #a1a1aa; font-size: 13px; cursor: pointer; transition: all 0.3s; }
+        
+        .load-more { display: block; width: 100%; padding: 14px; margin-top: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #a1a1aa; font-size: 13px; cursor: pointer; transition: all 0.3s; font-family: inherit; }
         .load-more:hover { background: rgba(26,159,255,0.1); border-color: rgba(26,159,255,0.3); color: #1a9fff; }
+
+        /* Add Game Form */
+        .add-game-section { background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.1); border-radius: 16px; padding: 24px; margin-bottom: 30px; }
+        .add-game-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .add-game-header h2 { font-size: 18px; font-weight: 700; color: #fff; }
+        .add-game-header .icon { width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #6d28d9); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .add-game-header .icon svg { width: 20px; height: 20px; fill: white; }
+        
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 12px; color: #a1a1aa; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { padding: 12px 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #e4e4e7; font-size: 14px; font-family: inherit; outline: none; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: rgba(139,92,246,0.5); background: rgba(255,255,255,0.05); }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: #52525b; }
+        .form-group textarea { min-height: 100px; resize: vertical; font-family: monospace; font-size: 12px; }
+        .form-group small { font-size: 11px; color: #52525b; }
+        
+        .form-actions { display: flex; gap: 12px; justify-content: flex-end; }
+        .btn-add-game { padding: 12px 24px; background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: inherit; display: flex; align-items: center; gap: 8px; }
+        .btn-add-game:hover { box-shadow: 0 4px 20px rgba(139,92,246,0.4); transform: translateY(-1px); }
+        .btn-add-game:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-clear { padding: 12px 24px; background: rgba(255,255,255,0.05); color: #a1a1aa; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: inherit; }
+        .btn-clear:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        /* Info Box */
+        .info-box { background: rgba(26,159,255,0.05); border: 1px solid rgba(26,159,255,0.1); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: flex; gap: 12px; }
+        .info-box.warning { background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.1); }
+        .info-box-icon { width: 24px; height: 24px; flex-shrink: 0; color: #1a9fff; }
+        .info-box.warning .info-box-icon { color: #f59e0b; }
+        .info-box-content { flex: 1; }
+        .info-box-content h4 { font-size: 14px; color: #fff; margin-bottom: 4px; }
+        .info-box-content p { font-size: 13px; color: #a1a1aa; line-height: 1.5; }
+        .info-box-content a { color: #1a9fff; text-decoration: none; }
+        .info-box-content a:hover { text-decoration: underline; }
+        .info-box-content code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #e4e4e7; }
+
+        /* Depot List */
+        .depot-list { margin-top: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; }
+        .depot-item { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+        .depot-item:last-child { margin-bottom: 0; }
+        .depot-item input { flex: 1; }
+        .depot-item .remove-depot { padding: 8px; background: rgba(239,68,68,0.1); border: none; border-radius: 6px; color: #f87171; cursor: pointer; }
+        .add-depot-btn { margin-top: 12px; padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px; color: #a1a1aa; cursor: pointer; font-size: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .add-depot-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
         .footer { position: relative; z-index: 10; text-align: center; padding: 30px; color: #3f3f46; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.04); margin-top: 40px; }
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(16,185,129,0.95); color: white; padding: 14px 24px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 1000; opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .footer a { color: #5865F2; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(16,185,129,0.95); color: white; padding: 14px 24px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 1000; opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 10px; max-width: 90%; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .toast.error { background: rgba(239,68,68,0.95); }
-        .instructions { margin-top: 50px; padding: 20px; background: rgba(26,159,255,0.05); border: 1px solid rgba(26,159,255,0.1); border-radius: 12px; }
-        .instructions h3 { font-size: 14px; color: #1a9fff; margin-bottom: 12px; }
-        .instructions ol { margin-left: 20px; color: #a1a1aa; font-size: 13px; line-height: 1.8; }
-        .instructions code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #e4e4e7; }
-        .legend { margin-top: 16px; padding: 14px; background: rgba(255,255,255,0.02); border-radius: 8px; }
-        .legend h4 { font-size: 11px; color: #71717a; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .legend-items { display: flex; flex-wrap: wrap; gap: 10px; }
-        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #a1a1aa; }
+        .toast.warning { background: rgba(245,158,11,0.95); }
+
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: #16161f; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; max-width: 500px; width: 100%; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+        .modal-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .modal-icon.warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .modal-icon svg { width: 26px; height: 26px; }
+        .modal-title { font-size: 18px; font-weight: 700; color: #fff; }
+        .modal-subtitle { font-size: 12px; color: #71717a; margin-top: 2px; }
+        .modal-body { margin-bottom: 24px; }
+        .modal-body p { color: #a1a1aa; font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+        .modal-body .game-name { color: #fff; font-weight: 600; }
+        .drm-info { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; padding: 12px; margin-top: 16px; }
+        .drm-info-title { font-size: 11px; color: #f59e0b; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+        .drm-info-list { font-size: 12px; color: #a1a1aa; list-style: none; }
+        .drm-info-list li { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .drm-info-list li::before { content: '⚠'; font-size: 10px; }
+        .discord-promo { background: rgba(88,101,242,0.1); border: 1px solid rgba(88,101,242,0.2); border-radius: 8px; padding: 12px; margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+        .discord-promo-icon { width: 36px; height: 36px; background: #5865F2; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .discord-promo-icon svg { width: 20px; height: 20px; fill: white; }
+        .discord-promo-text { font-size: 12px; color: #a1a1aa; }
+        .discord-promo-text a { color: #5865F2; font-weight: 600; text-decoration: none; }
+        .modal-buttons { display: flex; gap: 12px; }
+        .modal-btn { flex: 1; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; font-family: inherit; }
+        .modal-btn-cancel { background: rgba(255,255,255,0.05); color: #a1a1aa; border: 1px solid rgba(255,255,255,0.1); }
+        .modal-btn-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .modal-btn-confirm { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; }
+        .modal-btn-confirm:hover { box-shadow: 0 4px 20px rgba(245,158,11,0.4); }
+
         @media (max-width: 768px) {
-            .header { padding: 16px 20px; }
+            .header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+            .header-right { width: 100%; justify-content: center; }
             .main { padding: 40px 16px; }
             .hero h1 { font-size: 28px; }
+            .tab-nav { flex-direction: column; }
+            .tab-btn { justify-content: center; }
             .game-card { flex-direction: column; text-align: center; padding: 16px; }
             .game-info { text-align: center; }
             .game-title { justify-content: center; }
             .game-meta { justify-content: center; }
-            .game-image { width: 100%; height: auto; aspect-ratio: 460/215; max-width: 200px; }
-            .section-tabs { gap: 6px; }
-            .section-tab { padding: 6px 10px; font-size: 11px; }
+            .game-image, .game-image-placeholder { width: 100%; height: auto; aspect-ratio: 460/215; max-width: 200px; }
+            .game-actions { justify-content: center; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-actions { flex-direction: column; }
         }
     </style>
 </head>
 <body>
     <div class="bg-ambient"></div>
+    
     <header class="header">
         <div class="logo">
             <div class="logo-icon">
@@ -119,234 +222,249 @@
             </div>
             <div class="logo-text">SMGEN</div>
         </div>
-        <div class="vip-badge">Manifest Generator</div>
+        <div class="header-right">
+            <a href="https://discord.gg/pubslounge" target="_blank" class="discord-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" fill="currentColor"/></svg>
+                Join Discord
+            </a>
+            <div class="vip-badge">Manifest Generator</div>
+        </div>
     </header>
 
     <main class="main">
         <div class="hero">
-            <h1>Steam Manifest Library</h1>
-            <p>Search and download game manifests with DRM info. Filter by publisher or protection type.</p>
+            <h1>Steam Manifest Generator</h1>
+            <p>Generate and download Steam manifests. Add your own games with real manifest data from SteamDB.</p>
         </div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value" id="game-count">0</div><div class="stat-label">Total</div></div>
             <div class="stat"><div class="stat-value" id="available-count">0</div><div class="stat-label">Available</div></div>
-            <div class="stat"><div class="stat-value" id="denuvo-count">0</div><div class="stat-label">Denuvo</div></div>
-            <div class="stat"><div class="stat-value" id="drm-free-count">0</div><div class="stat-label">DRM-Free</div></div>
+            <div class="stat"><div class="stat-value" id="custom-count">0</div><div class="stat-label">Custom</div></div>
             <div class="stat"><div class="stat-value" id="download-count">0</div><div class="stat-label">Downloads</div></div>
         </div>
 
-        <div class="search-container">
-            <div class="search-box">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search games by name or App ID..." autocomplete="off">
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="browse">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                Browse Games
+            </button>
+            <button class="tab-btn" data-tab="add">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8m-4-4h8"/></svg>
+                Add Custom Game
+            </button>
+        </div>
+
+        <!-- Browse Tab -->
+        <div class="tab-content active" id="tab-browse">
+            <div class="search-container">
+                <div class="search-box">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search games by name or App ID..." autocomplete="off">
+                </div>
             </div>
+
+            <div class="section-tabs" id="sectionTabs">
+                <button class="section-tab active" data-section="all">All <span class="count" id="count-all">0</span></button>
+                <button class="section-tab" data-section="valve">Valve <span class="count" id="count-valve">0</span></button>
+                <button class="section-tab" data-section="denuvo">Denuvo <span class="count" id="count-denuvo">0</span></button>
+                <button class="section-tab" data-section="drm-free">DRM-Free <span class="count" id="count-drm-free">0</span></button>
+                <button class="section-tab" data-section="custom">My Games <span class="count" id="count-custom">0</span></button>
+                <button class="section-tab" data-section="unavailable">Unavailable <span class="count" id="count-unavailable">0</span></button>
+            </div>
+
+            <div class="results-info" id="resultsInfo"></div>
+            <div class="results" id="results"></div>
+            <button class="load-more" id="loadMore" style="display:none;">Load More Games</button>
         </div>
 
-        <div class="section-tabs" id="sectionTabs">
-            <button class="section-tab active" data-section="all">All <span class="count" id="count-all">0</span></button>
-            <button class="section-tab" data-section="valve">Valve <span class="count" id="count-valve">0</span></button>
-            <button class="section-tab" data-section="rockstar">Rockstar <span class="count" id="count-rockstar">0</span></button>
-            <button class="section-tab" data-section="ea">EA <span class="count" id="count-ea">0</span></button>
-            <button class="section-tab" data-section="ubisoft">Ubisoft <span class="count" id="count-ubisoft">0</span></button>
-            <button class="section-tab" data-section="denuvo">Denuvo <span class="count" id="count-denuvo">0</span></button>
-            <button class="section-tab" data-section="drm-free">DRM-Free <span class="count" id="count-drm-free">0</span></button>
-            <button class="section-tab" data-section="unavailable">Unavailable <span class="count" id="count-unavailable">0</span></button>
-        </div>
+        <!-- Add Game Tab -->
+        <div class="tab-content" id="tab-add">
+            <div class="info-box">
+                <svg class="info-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+                <div class="info-box-content">
+                    <h4>How to get Manifest IDs</h4>
+                    <p>Visit <a href="https://steamdb.info" target="_blank">SteamDB.info</a> → Search for your game → Go to "Depots" tab → Copy the Depot ID and Manifest ID. Join our <a href="https://discord.gg/pubslounge" target="_blank">Discord</a> for help!</p>
+                </div>
+            </div>
 
-        <div class="results-info" id="resultsInfo"></div>
-        <div class="results" id="results"></div>
-        <button class="load-more" id="loadMore" style="display:none;">Load More Games</button>
+            <div class="add-game-section">
+                <div class="add-game-header">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <h2>Add Custom Game</h2>
+                </div>
 
-        <div class="instructions">
-            <h3>📋 How to Use</h3>
-            <ol>
-                <li>Search for your game or use section tabs to filter</li>
-                <li>Click download to get the <code>.lua</code> manifest</li>
-                <li>Move file to <code>SteamTools/Manifests</code></li>
-                <li>Restart Steam</li>
-            </ol>
-            <div class="legend">
-                <h4>Badge Legend</h4>
-                <div class="legend-items">
-                    <div class="legend-item"><span class="badge badge-valve">VALVE</span> Valve games</div>
-                    <div class="legend-item"><span class="badge badge-denuvo">DENUVO</span> Has Denuvo</div>
-                    <div class="legend-item"><span class="badge badge-drm-free">DRM-FREE</span> No DRM</div>
-                    <div class="legend-item"><span class="badge badge-rockstar">R★</span> Rockstar (unavailable)</div>
-                    <div class="legend-item"><span class="badge badge-ea">EA</span> EA App required</div>
-                    <div class="legend-item"><span class="badge badge-ubisoft">UBI</span> Ubisoft Connect</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Game Name *</label>
+                        <input type="text" id="gameName" placeholder="e.g., Cyberpunk 2077">
+                    </div>
+                    <div class="form-group">
+                        <label>App ID *</label>
+                        <input type="text" id="appId" placeholder="e.g., 1091500">
+                        <small>Find on SteamDB or the Steam store URL</small>
+                    </div>
+                    <div class="form-group">
+                        <label>DRM Type</label>
+                        <select id="drmType">
+                            <option value="none">None / Unknown</option>
+                            <option value="drm-free">DRM-Free</option>
+                            <option value="denuvo">Denuvo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Depots & Manifests *</label>
+                    <div class="depot-list" id="depotList">
+                        <div class="depot-item">
+                            <input type="text" placeholder="Depot ID (e.g., 1091501)" class="depot-id">
+                            <input type="text" placeholder="Manifest ID (e.g., 7561906995606504576)" class="manifest-id">
+                        </div>
+                    </div>
+                    <button type="button" class="add-depot-btn" id="addDepotBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8m-4-4h8"/></svg>
+                        Add Another Depot
+                    </button>
+                    <small style="display:block;margin-top:8px;">Most games have multiple depots. Check SteamDB for all required depots.</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-clear" id="clearFormBtn">Clear</button>
+                    <button type="button" class="btn-add-game" id="addGameBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                        Add Game
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-box warning">
+                <svg class="info-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4m0 4h.01"/></svg>
+                <div class="info-box-content">
+                    <h4>Important Notes</h4>
+                    <p>• Manifest IDs change when games update - you may need to update them<br>
+                    • Games requiring external launchers (Rockstar, EA, Ubisoft) won't work<br>
+                    • Custom games are saved in your browser's local storage</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="footer">SMGEN · Not affiliated with Steam or Valve</footer>
+    <footer class="footer">
+        SMGEN · Need help? Join our <a href="https://discord.gg/pubslounge" target="_blank">Discord</a> · Not affiliated with Steam or Valve
+    </footer>
 
-    <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span id="toast-message">Downloaded!</span></div>
+    <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="toast-message">Success!</span>
+    </div>
+
+    <!-- Denuvo Modal -->
+    <div class="modal-overlay" id="denuvoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-icon warning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                </div>
+                <div>
+                    <div class="modal-title">DRM Protection Notice</div>
+                    <div class="modal-subtitle">Please read before proceeding</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>You're about to download the manifest for <span class="game-name" id="modalGameName">Game</span>.</p>
+                <div class="drm-info">
+                    <div class="drm-info-title">⚠️ Protection Information</div>
+                    <ul class="drm-info-list" id="modalDrmList">
+                        <li>This game includes Denuvo Anti-Tamper technology</li>
+                    </ul>
+                </div>
+                <div class="discord-promo">
+                    <div class="discord-promo-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.36-.698.772-1.362 1.225-1.993a.076.076 0 0 0-.041-.107 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.12-.094.246-.194.373-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                    </div>
+                    <div class="discord-promo-text">
+                        Need help? Join our <a href="https://discord.gg/pubslounge" target="_blank">Discord community</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn">Download Anyway</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const games = [
+        // Default games with example data
+        const defaultGames = [
             // VALVE GAMES
-            { name: "Half-Life 2", appId: "220", publisher: "valve", drmFree: true, depots: [{ depotId: "221", manifestId: "7829931797754166964" }] },
-            { name: "Half-Life 2: Episode One", appId: "380", publisher: "valve", drmFree: true, depots: [{ depotId: "381", manifestId: "5765982474774567843" }] },
-            { name: "Half-Life 2: Episode Two", appId: "420", publisher: "valve", drmFree: true, depots: [{ depotId: "421", manifestId: "6847291058472910584" }] },
-            { name: "Half-Life: Alyx", appId: "546560", publisher: "valve", drmFree: true, depots: [{ depotId: "546561", manifestId: "8374829183748291837" }] },
-            { name: "Half-Life", appId: "70", publisher: "valve", drmFree: true, depots: [{ depotId: "71", manifestId: "4958372049583720495" }] },
-            { name: "Half-Life: Source", appId: "280", publisher: "valve", drmFree: true, depots: [{ depotId: "281", manifestId: "7584920375849203758" }] },
-            { name: "Portal", appId: "400", publisher: "valve", drmFree: true, depots: [{ depotId: "401", manifestId: "1029384710293847102" }] },
-            { name: "Portal 2", appId: "620", publisher: "valve", drmFree: true, depots: [{ depotId: "621", manifestId: "2938471029384710293" }] },
-            { name: "Counter-Strike 2", appId: "730", publisher: "valve", drmFree: true, depots: [{ depotId: "731", manifestId: "4756291847562918475" }] },
-            { name: "Counter-Strike: Source", appId: "240", publisher: "valve", drmFree: true, depots: [{ depotId: "241", manifestId: "5847291058472910584" }] },
-            { name: "Counter-Strike 1.6", appId: "10", publisher: "valve", drmFree: true, depots: [{ depotId: "11", manifestId: "8574920185749201857" }] },
-            { name: "Team Fortress 2", appId: "440", publisher: "valve", drmFree: true, depots: [{ depotId: "441", manifestId: "9384720193847201938" }] },
-            { name: "Left 4 Dead", appId: "500", publisher: "valve", drmFree: true, depots: [{ depotId: "501", manifestId: "2958471029584710295" }] },
-            { name: "Left 4 Dead 2", appId: "550", publisher: "valve", drmFree: true, depots: [{ depotId: "551", manifestId: "3847291038472910384" }] },
-            { name: "Dota 2", appId: "570", publisher: "valve", drmFree: true, depots: [{ depotId: "571", manifestId: "4758201047582010475" }] },
-            { name: "Aperture Desk Job", appId: "1902490", publisher: "valve", drmFree: true, depots: [{ depotId: "1902491", manifestId: "4857201048572010485" }] },
+            { name: "Half-Life 2", appId: "220", publisher: "valve", drmFree: true, depots: [{ depotId: "221", manifestId: "5765982474774567843" }] },
+            { name: "Portal", appId: "400", publisher: "valve", drmFree: true, depots: [{ depotId: "401", manifestId: "8437017866498802854" }] },
+            { name: "Portal 2", appId: "620", publisher: "valve", drmFree: true, depots: [{ depotId: "621", manifestId: "2759529950541284022" }] },
+            { name: "Counter-Strike 2", appId: "730", publisher: "valve", drmFree: true, depots: [{ depotId: "731", manifestId: "3922474738544255842" }] },
+            { name: "Left 4 Dead 2", appId: "550", publisher: "valve", drmFree: true, depots: [{ depotId: "551", manifestId: "5146805690498828355" }] },
+            { name: "Team Fortress 2", appId: "440", publisher: "valve", drmFree: true, depots: [{ depotId: "441", manifestId: "1628069673846571920" }] },
+            { name: "Dota 2", appId: "570", publisher: "valve", drmFree: true, depots: [{ depotId: "571", manifestId: "6120486045822925539" }] },
+            { name: "Half-Life: Alyx", appId: "546560", publisher: "valve", drmFree: true, depots: [{ depotId: "546561", manifestId: "5765209778498739498" }] },
 
-            // ROCKSTAR GAMES (UNAVAILABLE)
-            { name: "Grand Theft Auto V", appId: "271590", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "271591", manifestId: "7509048598561981671" }] },
-            { name: "Grand Theft Auto V: Enhanced", appId: "3240220", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "3240221", manifestId: "8906022740565578137" }] },
-            { name: "Red Dead Redemption 2", appId: "1174180", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "1174181", manifestId: "8477312052549849498" }] },
-            { name: "Grand Theft Auto IV", appId: "12210", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "12211", manifestId: "5765432109876543210" }] },
-            { name: "Grand Theft Auto: San Andreas", appId: "12120", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "12121", manifestId: "6654321098765432109" }] },
-            { name: "L.A. Noire", appId: "110800", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "110801", manifestId: "1234567890123456789" }] },
-            { name: "Max Payne 3", appId: "204100", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "204101", manifestId: "5678901234567890123" }] },
-            { name: "Bully: Scholarship Edition", appId: "12200", publisher: "rockstar", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [{ depotId: "12201", manifestId: "9876543210987654321" }] },
-
-            // EA GAMES (UNAVAILABLE)
-            { name: "Battlefield 2042", appId: "1517290", publisher: "ea", unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1517291", manifestId: "4839274839274839274" }] },
-            { name: "Apex Legends", appId: "1172470", publisher: "ea", unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1172471", manifestId: "8574920185749201857" }] },
-            { name: "EA Sports FC 24", appId: "2195250", publisher: "ea", unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "2195251", manifestId: "1029384710293847102" }] },
-            { name: "Star Wars Jedi: Survivor", appId: "1774580", publisher: "ea", denuvo: true, unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1774581", manifestId: "9384720193847201938" }] },
-            { name: "Star Wars Jedi: Fallen Order", appId: "1172380", publisher: "ea", denuvo: true, unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1172381", manifestId: "1029384710293847103" }] },
-            { name: "Mass Effect Legendary Edition", appId: "1328670", publisher: "ea", unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1328671", manifestId: "4756291847562918476" }] },
-            { name: "Dead Space (2023)", appId: "1693980", publisher: "ea", denuvo: true, unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1693981", manifestId: "6938201069382010694" }] },
-            { name: "The Sims 4", appId: "1222670", publisher: "ea", unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1222671", manifestId: "7849201078492010785" }] },
-            { name: "It Takes Two", appId: "1426210", publisher: "ea", unavailable: true, unavailableReason: "Requires EA App", depots: [{ depotId: "1426211", manifestId: "8574920185749201858" }] },
-
-            // UBISOFT GAMES (UNAVAILABLE)
-            { name: "Assassin's Creed Mirage", appId: "2208920", publisher: "ubisoft", denuvo: true, unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "2208921", manifestId: "9384720193847201940" }] },
-            { name: "Assassin's Creed Valhalla", appId: "2208910", publisher: "ubisoft", denuvo: true, unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "2208911", manifestId: "1029384710293847105" }] },
-            { name: "Far Cry 6", appId: "2369390", publisher: "ubisoft", denuvo: true, unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "2369391", manifestId: "4756291847562918478" }] },
-            { name: "Rainbow Six Siege", appId: "359550", publisher: "ubisoft", unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "359551", manifestId: "9384720193847201941" }] },
-            { name: "Watch Dogs: Legion", appId: "2289850", publisher: "ubisoft", denuvo: true, unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "2289851", manifestId: "7849201078492010787" }] },
-            { name: "The Division 2", appId: "2221490", publisher: "ubisoft", unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "2221491", manifestId: "2938471029384710297" }] },
-            { name: "Avatar: Frontiers of Pandora", appId: "2177620", publisher: "ubisoft", denuvo: true, unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [{ depotId: "2177621", manifestId: "7849201078492010788" }] },
-
-            // DENUVO GAMES (Available)
-            { name: "Hogwarts Legacy", appId: "990080", denuvo: true, depots: [{ depotId: "990081", manifestId: "3689607233666352456" }] },
-            { name: "Elden Ring", appId: "1245620", denuvo: true, depots: [{ depotId: "1245621", manifestId: "6793002322587498957" }] },
-            { name: "Tekken 8", appId: "1778820", denuvo: true, depots: [{ depotId: "1778821", manifestId: "6938201069382010699" }] },
-            { name: "Street Fighter 6", appId: "1364780", denuvo: true, depots: [{ depotId: "1364781", manifestId: "8574920185749201862" }] },
-            { name: "Mortal Kombat 1", appId: "1971870", denuvo: true, depots: [{ depotId: "1971871", manifestId: "7849201078492010790" }] },
-            { name: "Armored Core VI", appId: "1888160", denuvo: true, depots: [{ depotId: "1888161", manifestId: "9384720193847201943" }] },
-            { name: "Dragon's Dogma 2", appId: "2054970", denuvo: true, depots: [{ depotId: "2054971", manifestId: "5847291058472910590" }] },
-            { name: "Resident Evil 4 (2023)", appId: "2050650", denuvo: true, depots: [{ depotId: "2050651", manifestId: "1029384710293847108" }] },
-            { name: "Resident Evil Village", appId: "1196590", denuvo: true, depots: [{ depotId: "1196591", manifestId: "2938471029384710299" }] },
-            { name: "Final Fantasy XVI", appId: "2515020", denuvo: true, depots: [{ depotId: "2515021", manifestId: "3847102938471029390" }] },
-            { name: "Final Fantasy VII Remake", appId: "1462040", denuvo: true, depots: [{ depotId: "1462041", manifestId: "5847291058472910591" }] },
-            { name: "Like a Dragon: Infinite Wealth", appId: "2072450", denuvo: true, depots: [{ depotId: "2072451", manifestId: "6938201069382010700" }] },
-            { name: "Persona 3 Reload", appId: "2161700", denuvo: true, depots: [{ depotId: "2161701", manifestId: "7849201078492010791" }] },
-            { name: "Starfield", appId: "1716740", denuvo: true, depots: [{ depotId: "1716741", manifestId: "9384720193847201946" }] },
-            { name: "Diablo IV", appId: "2344520", denuvo: true, depots: [{ depotId: "2344521", manifestId: "1029384710293847111" }] },
-            { name: "God of War Ragnarök", appId: "2322010", denuvo: true, depots: [{ depotId: "2322011", manifestId: "4765432109876543214" }] },
-            { name: "Spider-Man Remastered", appId: "1817070", denuvo: true, depots: [{ depotId: "1817071", manifestId: "5654321098765432103" }] },
-            { name: "Spider-Man: Miles Morales", appId: "1817190", denuvo: true, depots: [{ depotId: "1817191", manifestId: "6543210987654321102" }] },
-            { name: "Horizon Forbidden West", appId: "2420110", denuvo: true, depots: [{ depotId: "2420111", manifestId: "9210987654321098769" }] },
-            { name: "The Last of Us Part I", appId: "1888930", denuvo: true, depots: [{ depotId: "1888931", manifestId: "1098765432109876548" }] },
-            { name: "Ghost of Tsushima", appId: "2215430", denuvo: true, depots: [{ depotId: "2215431", manifestId: "8321098765432109881" }] },
-            { name: "Helldivers 2", appId: "553850", denuvo: true, depots: [{ depotId: "553851", manifestId: "9210987654321098770" }] },
-            { name: "Alan Wake 2", appId: "2715500", denuvo: true, depots: [{ depotId: "2715501", manifestId: "3876543210987654334" }] },
-            { name: "Warhammer 40K: Space Marine 2", appId: "2183900", denuvo: true, depots: [{ depotId: "2183901", manifestId: "3847102938471029391" }] },
-            { name: "Lies of P", appId: "1627720", denuvo: true, depots: [{ depotId: "1627721", manifestId: "4756291847562918483" }] },
-            { name: "DOOM Eternal", appId: "782330", denuvo: true, depots: [{ depotId: "782331", manifestId: "4756291847562918485" }] },
-            { name: "Monster Hunter Rise", appId: "1446780", denuvo: true, depots: [{ depotId: "1446781", manifestId: "5847291058472910594" }] },
-            { name: "Dying Light 2", appId: "534380", denuvo: true, depots: [{ depotId: "534381", manifestId: "2938471029384710301" }] },
-            { name: "Forza Horizon 5", appId: "1551360", denuvo: true, depots: [{ depotId: "1551361", manifestId: "8574920185749201867" }] },
-            { name: "Halo Infinite", appId: "1240440", denuvo: true, depots: [{ depotId: "1240441", manifestId: "7849201078492010795" }] },
-
-            // DRM-FREE GAMES
-            { name: "Cyberpunk 2077", appId: "1091500", drmFree: true, depots: [{ depotId: "1091501", manifestId: "7561906995606504576" }] },
-            { name: "The Witcher 3: Wild Hunt", appId: "292030", drmFree: true, depots: [{ depotId: "292031", manifestId: "5765432109876543210" }] },
-            { name: "Baldur's Gate 3", appId: "1086940", drmFree: true, depots: [{ depotId: "1086941", manifestId: "7432109876543210989" }] },
-            { name: "Hollow Knight", appId: "367520", drmFree: true, depots: [{ depotId: "367521", manifestId: "9321098765432109876" }] },
-            { name: "Celeste", appId: "504230", drmFree: true, depots: [{ depotId: "504231", manifestId: "1098765432109876543" }] },
-            { name: "Hades", appId: "1145360", drmFree: true, depots: [{ depotId: "1145361", manifestId: "2987654321098765432" }] },
-            { name: "Hades II", appId: "1145350", drmFree: true, depots: [{ depotId: "1145351", manifestId: "3876543210987654321" }] },
-            { name: "Dead Cells", appId: "588650", drmFree: true, depots: [{ depotId: "588651", manifestId: "4765432109876543210" }] },
-            { name: "Cuphead", appId: "268910", drmFree: true, depots: [{ depotId: "268911", manifestId: "5654321098765432109" }] },
-            { name: "Stardew Valley", appId: "413150", drmFree: true, depots: [{ depotId: "413151", manifestId: "6543210987654321098" }] },
-            { name: "Terraria", appId: "105600", drmFree: true, depots: [{ depotId: "105601", manifestId: "7432109876543210987" }] },
-            { name: "Undertale", appId: "391540", drmFree: true, depots: [{ depotId: "391541", manifestId: "8321098765432109876" }] },
-            { name: "Stray", appId: "1332010", drmFree: true, depots: [{ depotId: "1332011", manifestId: "1098765432109876544" }] },
-            { name: "Vampire Survivors", appId: "1794680", drmFree: true, depots: [{ depotId: "1794681", manifestId: "2987654321098765433" }] },
-            { name: "Disco Elysium", appId: "632470", drmFree: true, depots: [{ depotId: "632471", manifestId: "3876543210987654322" }] },
-            { name: "Outer Wilds", appId: "753640", drmFree: true, depots: [{ depotId: "753641", manifestId: "4765432109876543211" }] },
-            { name: "Inscryption", appId: "1092790", drmFree: true, depots: [{ depotId: "1092791", manifestId: "6543210987654321099" }] },
-            { name: "Slay the Spire", appId: "646570", drmFree: true, depots: [{ depotId: "646571", manifestId: "7432109876543210988" }] },
-            { name: "RimWorld", appId: "294100", drmFree: true, depots: [{ depotId: "294101", manifestId: "8321098765432109877" }] },
-            { name: "Factorio", appId: "427520", drmFree: true, depots: [{ depotId: "427521", manifestId: "9210987654321098766" }] },
-            { name: "Satisfactory", appId: "526870", drmFree: true, depots: [{ depotId: "526871", manifestId: "1098765432109876545" }] },
-            { name: "Valheim", appId: "892970", drmFree: true, depots: [{ depotId: "892971", manifestId: "2987654321098765434" }] },
-            { name: "Subnautica", appId: "264710", drmFree: true, depots: [{ depotId: "264711", manifestId: "3876543210987654323" }] },
-            { name: "No Man's Sky", appId: "275850", drmFree: true, depots: [{ depotId: "275851", manifestId: "5654321098765432101" }] },
-            { name: "Deep Rock Galactic", appId: "548430", drmFree: true, depots: [{ depotId: "548431", manifestId: "8321098765432109890" }] },
-            { name: "Palworld", appId: "1623730", drmFree: true, depots: [{ depotId: "1623731", manifestId: "7432109876543211001" }] },
-            { name: "Lethal Company", appId: "1966720", drmFree: true, depots: [{ depotId: "1966721", manifestId: "3847102938471029419" }] },
-            { name: "Phasmophobia", appId: "739630", drmFree: true, depots: [{ depotId: "739631", manifestId: "4765432109876543222" }] },
-            { name: "Sons of the Forest", appId: "1326470", drmFree: true, depots: [{ depotId: "1326471", manifestId: "7432109876543210999" }] },
-            { name: "God of War", appId: "1593500", drmFree: true, depots: [{ depotId: "1593501", manifestId: "3876543210987654325" }] },
-            { name: "Divinity: Original Sin 2", appId: "435150", drmFree: true, depots: [{ depotId: "435151", manifestId: "6543210987654321100" }] },
-            { name: "Crusader Kings III", appId: "1158310", drmFree: true, depots: [{ depotId: "1158311", manifestId: "1098765432109876546" }] },
-            { name: "Stellaris", appId: "281990", drmFree: true, depots: [{ depotId: "281991", manifestId: "2987654321098765435" }] },
-            { name: "Control Ultimate Edition", appId: "870780", drmFree: true, depots: [{ depotId: "870781", manifestId: "5654321098765432112" }] },
-            { name: "Sekiro: Shadows Die Twice", appId: "814380", drmFree: true, depots: [{ depotId: "814381", manifestId: "5847291058472910595" }] },
-            { name: "Dark Souls III", appId: "374320", drmFree: true, depots: [{ depotId: "374321", manifestId: "6938201069382010704" }] },
-            { name: "Dark Souls: Remastered", appId: "570940", drmFree: true, depots: [{ depotId: "570941", manifestId: "3876543210987654327" }] },
-            { name: "Yakuza 0", appId: "638970", drmFree: true, depots: [{ depotId: "638971", manifestId: "3876543210987654328" }] },
-            { name: "Persona 4 Golden", appId: "1113000", drmFree: true, depots: [{ depotId: "1113001", manifestId: "3876543210987654329" }] },
-            { name: "Horizon Zero Dawn", appId: "1151640", drmFree: true, depots: [{ depotId: "1151641", manifestId: "8321098765432109880" }] },
-            { name: "Days Gone", appId: "1259420", drmFree: true, depots: [{ depotId: "1259421", manifestId: "2987654321098765437" }] },
-            { name: "Death Stranding", appId: "1850570", drmFree: true, depots: [{ depotId: "1850571", manifestId: "3876543210987654326" }] },
-            { name: "Returnal", appId: "1649240", drmFree: true, depots: [{ depotId: "1649241", manifestId: "5654321098765432104" }] },
-            { name: "Uncharted: Legacy of Thieves", appId: "1659420", drmFree: true, depots: [{ depotId: "1659421", manifestId: "4765432109876543215" }] },
-            { name: "Ratchet & Clank: Rift Apart", appId: "1895880", drmFree: true, depots: [{ depotId: "1895881", manifestId: "6543210987654321103" }] },
-            { name: "NieR: Automata", appId: "524220", drmFree: true, depots: [{ depotId: "524221", manifestId: "8321098765432109884" }] },
-            { name: "Monster Hunter: World", appId: "582010", drmFree: true, depots: [{ depotId: "582011", manifestId: "6543210987654321104" }] },
-            { name: "Devil May Cry 5", appId: "601150", drmFree: true, depots: [{ depotId: "601151", manifestId: "6938201069382010703" }] },
-            { name: "Resident Evil 2", appId: "883710", drmFree: true, depots: [{ depotId: "883711", manifestId: "7849201078492010794" }] },
-            { name: "Resident Evil 7", appId: "418370", drmFree: true, depots: [{ depotId: "418371", manifestId: "9210987654321098771" }] },
-            { name: "Euro Truck Simulator 2", appId: "227300", drmFree: true, depots: [{ depotId: "227301", manifestId: "9210987654321098785" }] },
-            { name: "BeamNG.drive", appId: "284160", drmFree: true, depots: [{ depotId: "284161", manifestId: "6543210987654321119" }] },
-            { name: "Cities: Skylines", appId: "255710", drmFree: true, depots: [{ depotId: "255711", manifestId: "6543210987654321101" }] },
-            { name: "Kerbal Space Program", appId: "220200", drmFree: true, depots: [{ depotId: "220201", manifestId: "7432109876543210990" }] },
-            { name: "Project Zomboid", appId: "108600", drmFree: true, depots: [{ depotId: "108601", manifestId: "4756291847562918503" }] },
-            { name: "Rust", appId: "252490", drmFree: true, depots: [{ depotId: "252491", manifestId: "9384720193847201965" }] },
-            { name: "7 Days to Die", appId: "251570", drmFree: true, depots: [{ depotId: "251571", manifestId: "3847102938471029412" }] },
-            { name: "ARK: Survival Evolved", appId: "346110", drmFree: true, depots: [{ depotId: "346111", manifestId: "4765432109876543225" }] },
-            { name: "The Forest", appId: "242760", drmFree: true, depots: [{ depotId: "242761", manifestId: "8321098765432109888" }] },
-            { name: "Amnesia: The Dark Descent", appId: "57300", drmFree: true, depots: [{ depotId: "57301", manifestId: "6543210987654321109" }] },
-            { name: "SOMA", appId: "282140", drmFree: true, depots: [{ depotId: "282141", manifestId: "7432109876543210998" }] },
-            { name: "Outlast", appId: "238320", drmFree: true, depots: [{ depotId: "238321", manifestId: "1098765432109876555" }] },
-            { name: "The Evil Within 2", appId: "601430", drmFree: true, depots: [{ depotId: "601431", manifestId: "6543210987654321111" }] },
-            { name: "Ultrakill", appId: "1229490", drmFree: true, depots: [{ depotId: "1229491", manifestId: "4765432109876543230" }] },
-            { name: "DUSK", appId: "519860", drmFree: true, depots: [{ depotId: "519861", manifestId: "5654321098765432119" }] },
-            { name: "Katana ZERO", appId: "460950", drmFree: true, depots: [{ depotId: "460951", manifestId: "1098765432109876562" }] },
-            { name: "Hotline Miami", appId: "219150", drmFree: true, depots: [{ depotId: "219151", manifestId: "2987654321098765451" }] },
-            { name: "Risk of Rain 2", appId: "632360", drmFree: true, depots: [{ depotId: "632361", manifestId: "2987654321098765450" }] },
-            { name: "Enter the Gungeon", appId: "311690", drmFree: true, depots: [{ depotId: "311691", manifestId: "1098765432109876561" }] },
-            { name: "Darkest Dungeon", appId: "262060", drmFree: true, depots: [{ depotId: "262061", manifestId: "5654321098765432117" }] },
-            { name: "The Binding of Isaac: Rebirth", appId: "250900", drmFree: true, depots: [{ depotId: "250901", manifestId: "6543210987654321116" }] },
-            { name: "Frostpunk", appId: "323190", drmFree: true, depots: [{ depotId: "323191", manifestId: "8321098765432109879" }] },
-            { name: "Manor Lords", appId: "1363080", drmFree: true, depots: [{ depotId: "1363081", manifestId: "9210987654321098768" }] },
-            { name: "Dwarf Fortress", appId: "975370", drmFree: true, depots: [{ depotId: "975371", manifestId: "8574920185749201890" }] }
+            // EXAMPLE GAMES - Users should add their own with real manifest IDs
+            { name: "Cyberpunk 2077", appId: "1091500", drmFree: true, verified: true, depots: [{ depotId: "1091501", manifestId: "7561906995606504576" }] },
+            { name: "The Witcher 3", appId: "292030", drmFree: true, depots: [{ depotId: "292031", manifestId: "3268546929048208686" }] },
+            { name: "Hollow Knight", appId: "367520", drmFree: true, depots: [{ depotId: "367521", manifestId: "3675898716091628957" }] },
+            { name: "Hades", appId: "1145360", drmFree: true, depots: [{ depotId: "1145361", manifestId: "8641205937769751684" }] },
+            { name: "Stardew Valley", appId: "413150", drmFree: true, depots: [{ depotId: "413151", manifestId: "3115112746481370098" }] },
+            { name: "Terraria", appId: "105600", drmFree: true, depots: [{ depotId: "105601", manifestId: "3547156996054267962" }] },
+            
+            // DENUVO EXAMPLES
+            { name: "Hogwarts Legacy", appId: "990080", denuvo: true, depots: [{ depotId: "990081", manifestId: "NEEDS_REAL_ID" }] },
+            { name: "Elden Ring", appId: "1245620", denuvo: true, depots: [{ depotId: "1245621", manifestId: "NEEDS_REAL_ID" }] },
+            
+            // UNAVAILABLE
+            { name: "Grand Theft Auto V", appId: "271590", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [] },
+            { name: "Red Dead Redemption 2", appId: "1174180", unavailable: true, unavailableReason: "Requires Rockstar Launcher", depots: [] },
+            { name: "EA Sports FC 25", appId: "2669320", unavailable: true, unavailableReason: "Requires EA App", depots: [] },
+            { name: "Battlefield 2042", appId: "1517290", unavailable: true, unavailableReason: "Requires EA App", depots: [] },
+            { name: "Assassin's Creed Mirage", appId: "2208920", unavailable: true, unavailableReason: "Requires Ubisoft Connect", depots: [] },
         ];
 
         // State
+        let games = [];
+        let customGames = [];
         let currentSection = 'all';
         let currentSearch = '';
         let displayCount = 50;
+        let pendingDownload = null;
+
+        // Load custom games from localStorage
+        function loadCustomGames() {
+            try {
+                const saved = localStorage.getItem('smgenCustomGames');
+                if (saved) {
+                    customGames = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Error loading custom games:', e);
+                customGames = [];
+            }
+        }
+
+        // Save custom games to localStorage
+        function saveCustomGames() {
+            try {
+                localStorage.setItem('smgenCustomGames', JSON.stringify(customGames));
+            } catch (e) {
+                console.error('Error saving custom games:', e);
+            }
+        }
+
+        // Combine default and custom games
+        function getAllGames() {
+            return [...defaultGames, ...customGames.map(g => ({ ...g, isCustom: true }))];
+        }
 
         // DOM Elements
         const searchInput = document.getElementById('searchInput');
@@ -355,23 +473,76 @@
         const loadMoreBtn = document.getElementById('loadMore');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
+        const denuvoModal = document.getElementById('denuvoModal');
+        const modalGameName = document.getElementById('modalGameName');
+        const modalDrmList = document.getElementById('modalDrmList');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
 
-        // Generate manifest content
         function generateLuaContent(game) {
-            let content = `-- ${game.name}\n-- App ID: ${game.appId}\n-- Generated by SMGEN\n\n`;
+            let content = `-- =============================================\n`;
+            content += `-- ${game.name}\n`;
+            content += `-- App ID: ${game.appId}\n`;
+            content += `-- Generated by SMGEN\n`;
+            content += `-- Discord: discord.gg/pubslounge\n`;
+            content += `-- =============================================\n\n`;
+            
             content += `addappid(${game.appId}, 1, "${game.name}")\n\n`;
-            game.depots.forEach(d => {
-                content += `addappid(${d.depotId}, 1, "${game.name}")\n`;
-                content += `setManifestid(${d.depotId}, "${d.manifestId}")\n\n`;
-            });
+            
+            if (game.depots && game.depots.length > 0) {
+                game.depots.forEach(d => {
+                    if (d.depotId && d.manifestId && d.manifestId !== 'NEEDS_REAL_ID') {
+                        content += `addappid(${d.depotId}, 1, "${game.name}")\n`;
+                        content += `setManifestid(${d.depotId}, "${d.manifestId}")\n\n`;
+                    }
+                });
+            }
+            
             return content;
         }
 
-        // Download manifest
-        function downloadManifest(index) {
-            const game = games[index];
-            if (!game || game.unavailable) {
-                showToast('This game is unavailable', true);
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            toast.className = 'toast show';
+            if (type === 'error') toast.classList.add('error');
+            if (type === 'warning') toast.classList.add('warning');
+            setTimeout(() => toast.classList.remove('show', 'error', 'warning'), 3000);
+        }
+
+        function showModal(game, index) {
+            pendingDownload = { game, index };
+            modalGameName.textContent = game.name;
+            
+            let drmItems = [];
+            if (game.denuvo) drmItems.push('This game includes Denuvo Anti-Tamper technology');
+            if (!game.depots || game.depots.length === 0 || game.depots.some(d => d.manifestId === 'NEEDS_REAL_ID')) {
+                drmItems.push('Manifest IDs may need to be updated - check SteamDB');
+            }
+            
+            modalDrmList.innerHTML = drmItems.map(item => `<li>${item}</li>`).join('');
+            denuvoModal.classList.add('show');
+        }
+
+        function closeModal() {
+            denuvoModal.classList.remove('show');
+            pendingDownload = null;
+        }
+
+        function confirmDownload() {
+            if (pendingDownload) {
+                executeDownload(pendingDownload.game, pendingDownload.index);
+                closeModal();
+            }
+        }
+
+        function executeDownload(game, index) {
+            // Check if manifest IDs are valid
+            if (!game.depots || game.depots.length === 0) {
+                showToast('No depot data available for this game', 'error');
+                return;
+            }
+            
+            if (game.depots.some(d => d.manifestId === 'NEEDS_REAL_ID')) {
+                showToast('This game needs real manifest IDs from SteamDB', 'warning');
                 return;
             }
 
@@ -392,7 +563,7 @@
                 URL.revokeObjectURL(url);
 
                 incrementDownload();
-                showToast(`${game.name} downloaded!`);
+                showToast(`${game.name} manifest downloaded!`);
 
                 if (btn) {
                     btn.classList.add('success');
@@ -400,17 +571,42 @@
                     setTimeout(() => {
                         btn.disabled = false;
                         btn.classList.remove('success');
-                        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download';
+                        renderResults();
                     }, 2000);
                 }
             }, 300);
         }
 
-        function showToast(message, isError = false) {
-            toastMessage.textContent = message;
-            toast.classList.toggle('error', isError);
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        function downloadManifest(index) {
+            const allGames = getAllGames();
+            const game = allGames[index];
+            if (!game) return;
+
+            if (game.unavailable) {
+                showToast(game.unavailableReason, 'error');
+                return;
+            }
+
+            if (game.denuvo || (game.depots && game.depots.some(d => d.manifestId === 'NEEDS_REAL_ID'))) {
+                showModal(game, index);
+            } else {
+                executeDownload(game, index);
+            }
+        }
+
+        function deleteCustomGame(index) {
+            const allGames = getAllGames();
+            const game = allGames[index];
+            if (!game || !game.isCustom) return;
+            
+            const customIndex = customGames.findIndex(g => g.appId === game.appId);
+            if (customIndex !== -1) {
+                customGames.splice(customIndex, 1);
+                saveCustomGames();
+                showToast(`${game.name} removed`);
+                updateCounts();
+                renderResults();
+            }
         }
 
         function getDownloadCount() {
@@ -427,77 +623,93 @@
             return `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/capsule_231x87.jpg`;
         }
 
-        // Filter games
         function filterGames() {
-            let filtered = games;
-
-            // Section filter
+            const allGames = getAllGames();
+            let filtered = allGames;
+            
             if (currentSection !== 'all') {
-                if (currentSection === 'valve') filtered = games.filter(g => g.publisher === 'valve');
-                else if (currentSection === 'rockstar') filtered = games.filter(g => g.publisher === 'rockstar');
-                else if (currentSection === 'ea') filtered = games.filter(g => g.publisher === 'ea');
-                else if (currentSection === 'ubisoft') filtered = games.filter(g => g.publisher === 'ubisoft');
-                else if (currentSection === 'denuvo') filtered = games.filter(g => g.denuvo && !g.unavailable);
-                else if (currentSection === 'drm-free') filtered = games.filter(g => g.drmFree && !g.unavailable);
-                else if (currentSection === 'unavailable') filtered = games.filter(g => g.unavailable);
+                if (currentSection === 'valve') filtered = allGames.filter(g => g.publisher === 'valve');
+                else if (currentSection === 'denuvo') filtered = allGames.filter(g => g.denuvo && !g.unavailable);
+                else if (currentSection === 'drm-free') filtered = allGames.filter(g => g.drmFree && !g.unavailable);
+                else if (currentSection === 'custom') filtered = allGames.filter(g => g.isCustom);
+                else if (currentSection === 'unavailable') filtered = allGames.filter(g => g.unavailable);
             }
-
-            // Search filter
+            
             if (currentSearch) {
                 const search = currentSearch.toLowerCase();
-                filtered = filtered.filter(g => 
-                    g.name.toLowerCase().includes(search) || g.appId.includes(search)
-                );
+                filtered = filtered.filter(g => g.name.toLowerCase().includes(search) || g.appId.includes(search));
             }
-
+            
             return filtered;
         }
 
-        // Render game card
         function renderGameCard(game, index) {
             const isUnavailable = game.unavailable;
+            const needsManifest = game.depots && game.depots.some(d => d.manifestId === 'NEEDS_REAL_ID');
             const cardClasses = ['game-card'];
+            
             if (isUnavailable) cardClasses.push('unavailable');
             if (game.denuvo && !isUnavailable) cardClasses.push('denuvo-game');
             if (game.publisher === 'valve') cardClasses.push('valve-game');
-            if (game.drmFree && !isUnavailable) cardClasses.push('drm-free-game');
+            if (game.drmFree && !isUnavailable && !game.publisher) cardClasses.push('drm-free-game');
+            if (game.isCustom) cardClasses.push('custom-game');
 
             let badges = '';
             if (game.publisher === 'valve') badges += '<span class="badge badge-valve">VALVE</span>';
-            if (game.publisher === 'rockstar') badges += '<span class="badge badge-rockstar">R★</span>';
-            if (game.publisher === 'ea') badges += '<span class="badge badge-ea">EA</span>';
-            if (game.publisher === 'ubisoft') badges += '<span class="badge badge-ubisoft">UBI</span>';
             if (game.denuvo) badges += '<span class="badge badge-denuvo">DENUVO</span>';
             if (game.drmFree && !game.publisher) badges += '<span class="badge badge-drm-free">DRM-FREE</span>';
+            if (game.isCustom) badges += '<span class="badge badge-custom">CUSTOM</span>';
+            if (game.verified) badges += '<span class="badge badge-verified">VERIFIED</span>';
             if (isUnavailable) badges += '<span class="badge badge-unavailable">UNAVAILABLE</span>';
+
+            let btnClass = 'download-btn';
+            if (isUnavailable || needsManifest) btnClass += ' unavailable-btn';
+            else if (game.denuvo) btnClass += ' denuvo-btn';
+
+            let btnContent = '';
+            if (isUnavailable) {
+                btnContent = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> N/A';
+            } else if (needsManifest) {
+                btnContent = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg> Need ID';
+            } else {
+                btnContent = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download';
+            }
+
+            let extraInfo = '';
+            if (isUnavailable) extraInfo = `<span style="color:#f87171;font-size:10px;">${game.unavailableReason}</span>`;
+            else if (needsManifest) extraInfo = '<span style="color:#f59e0b;font-size:10px;">Needs manifest from SteamDB</span>';
 
             return `
                 <div class="${cardClasses.join(' ')}">
                     <div class="game-image-container">
-                        <img class="game-image" src="${getGameImage(game.appId)}" alt="${game.name}" onerror="this.style.display='none'">
+                        <img class="game-image" src="${getGameImage(game.appId)}" alt="${game.name}" onerror="this.outerHTML='<div class=\\'game-image-placeholder\\'>${game.name}</div>'">
                         ${isUnavailable ? '<div class="unavailable-overlay"><span class="unavailable-badge-img">Unavailable</span></div>' : ''}
                     </div>
                     <div class="game-info">
                         <div class="game-title">${game.name}<div class="game-badges">${badges}</div></div>
                         <div class="game-meta">
                             <span>App ID: <span class="meta-value">${game.appId}</span></span>
-                            ${isUnavailable ? `<span style="color:#f87171;font-size:10px;">${game.unavailableReason}</span>` : ''}
+                            ${game.depots && game.depots.length > 0 ? `<span>Depots: <span class="meta-value">${game.depots.length}</span></span>` : ''}
+                            ${extraInfo}
                         </div>
                     </div>
-                    <button class="download-btn ${isUnavailable ? 'unavailable-btn' : ''}" data-index="${index}" onclick="${isUnavailable ? `showToast('${game.unavailableReason}', true)` : `downloadManifest(${index})`}">
-                        ${isUnavailable ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> N/A' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download'}
-                    </button>
+                    <div class="game-actions">
+                        <button class="${btnClass}" data-index="${index}" onclick="${isUnavailable ? `showToast('${game.unavailableReason}', 'error')` : `downloadManifest(${index})`}">
+                            ${btnContent}
+                        </button>
+                        ${game.isCustom ? `<button class="delete-btn" onclick="deleteCustomGame(${index})" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>` : ''}
+                    </div>
                 </div>
             `;
         }
 
-        // Render results
         function renderResults() {
             const filtered = filterGames();
+            const allGames = getAllGames();
             const toShow = filtered.slice(0, displayCount);
 
             if (toShow.length === 0) {
-                resultsContainer.innerHTML = '<div class="no-results"><div style="font-size:48px;opacity:0.5;margin-bottom:16px;">🔍</div><p>No games found</p></div>';
+                resultsContainer.innerHTML = '<div class="no-results"><div style="font-size:48px;opacity:0.5;margin-bottom:16px;">🔍</div><p>No games found. Try adding a custom game!</p></div>';
                 resultsInfo.innerHTML = '';
                 loadMoreBtn.style.display = 'none';
                 return;
@@ -505,48 +717,47 @@
 
             resultsInfo.innerHTML = `Showing <strong>${toShow.length}</strong> of <strong>${filtered.length}</strong> games`;
             resultsContainer.innerHTML = toShow.map((g, i) => {
-                const originalIndex = games.indexOf(g);
+                const originalIndex = allGames.indexOf(g);
                 return renderGameCard(g, originalIndex);
             }).join('');
 
             loadMoreBtn.style.display = toShow.length < filtered.length ? 'block' : 'none';
         }
 
-        // Update counts
         function updateCounts() {
-            const total = games.length;
-            const available = games.filter(g => !g.unavailable).length;
-            const denuvo = games.filter(g => g.denuvo && !g.unavailable).length;
-            const drmFree = games.filter(g => g.drmFree && !g.unavailable).length;
-            const valve = games.filter(g => g.publisher === 'valve').length;
-            const rockstar = games.filter(g => g.publisher === 'rockstar').length;
-            const ea = games.filter(g => g.publisher === 'ea').length;
-            const ubisoft = games.filter(g => g.publisher === 'ubisoft').length;
-            const unavailable = games.filter(g => g.unavailable).length;
+            const allGames = getAllGames();
+            const total = allGames.length;
+            const available = allGames.filter(g => !g.unavailable).length;
+            const custom = customGames.length;
+            const denuvo = allGames.filter(g => g.denuvo && !g.unavailable).length;
+            const drmFree = allGames.filter(g => g.drmFree && !g.unavailable).length;
+            const valve = allGames.filter(g => g.publisher === 'valve').length;
+            const unavailable = allGames.filter(g => g.unavailable).length;
 
             document.getElementById('game-count').textContent = total;
             document.getElementById('available-count').textContent = available;
-            document.getElementById('denuvo-count').textContent = denuvo;
-            document.getElementById('drm-free-count').textContent = drmFree;
+            document.getElementById('custom-count').textContent = custom;
             document.getElementById('download-count').textContent = getDownloadCount();
 
             document.getElementById('count-all').textContent = total;
             document.getElementById('count-valve').textContent = valve;
-            document.getElementById('count-rockstar').textContent = rockstar;
-            document.getElementById('count-ea').textContent = ea;
-            document.getElementById('count-ubisoft').textContent = ubisoft;
             document.getElementById('count-denuvo').textContent = denuvo;
             document.getElementById('count-drm-free').textContent = drmFree;
+            document.getElementById('count-custom').textContent = custom;
             document.getElementById('count-unavailable').textContent = unavailable;
         }
 
-        // Event listeners
-        searchInput.addEventListener('input', (e) => {
-            currentSearch = e.target.value;
-            displayCount = 50;
-            renderResults();
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            });
         });
 
+        // Section filtering
         document.querySelectorAll('.section-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
@@ -557,12 +768,109 @@
             });
         });
 
+        // Search
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            displayCount = 50;
+            renderResults();
+        });
+
+        // Load more
         loadMoreBtn.addEventListener('click', () => {
             displayCount += 50;
             renderResults();
         });
 
+        // Modal
+        modalConfirmBtn.addEventListener('click', confirmDownload);
+        denuvoModal.addEventListener('click', (e) => { if (e.target === denuvoModal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        // Add depot button
+        document.getElementById('addDepotBtn').addEventListener('click', () => {
+            const depotList = document.getElementById('depotList');
+            const newDepot = document.createElement('div');
+            newDepot.className = 'depot-item';
+            newDepot.innerHTML = `
+                <input type="text" placeholder="Depot ID" class="depot-id">
+                <input type="text" placeholder="Manifest ID" class="manifest-id">
+                <button type="button" class="remove-depot" onclick="this.parentElement.remove()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            `;
+            depotList.appendChild(newDepot);
+        });
+
+        // Clear form
+        document.getElementById('clearFormBtn').addEventListener('click', () => {
+            document.getElementById('gameName').value = '';
+            document.getElementById('appId').value = '';
+            document.getElementById('drmType').value = 'none';
+            document.getElementById('depotList').innerHTML = `
+                <div class="depot-item">
+                    <input type="text" placeholder="Depot ID (e.g., 1091501)" class="depot-id">
+                    <input type="text" placeholder="Manifest ID (e.g., 7561906995606504576)" class="manifest-id">
+                </div>
+            `;
+        });
+
+        // Add game
+        document.getElementById('addGameBtn').addEventListener('click', () => {
+            const name = document.getElementById('gameName').value.trim();
+            const appId = document.getElementById('appId').value.trim();
+            const drmType = document.getElementById('drmType').value;
+            
+            if (!name || !appId) {
+                showToast('Please enter game name and App ID', 'error');
+                return;
+            }
+
+            // Check if already exists
+            if (getAllGames().some(g => g.appId === appId)) {
+                showToast('A game with this App ID already exists', 'error');
+                return;
+            }
+
+            // Get depots
+            const depotItems = document.querySelectorAll('.depot-item');
+            const depots = [];
+            depotItems.forEach(item => {
+                const depotId = item.querySelector('.depot-id').value.trim();
+                const manifestId = item.querySelector('.manifest-id').value.trim();
+                if (depotId && manifestId) {
+                    depots.push({ depotId, manifestId });
+                }
+            });
+
+            if (depots.length === 0) {
+                showToast('Please add at least one depot with manifest ID', 'error');
+                return;
+            }
+
+            const newGame = {
+                name,
+                appId,
+                depots,
+                drmFree: drmType === 'drm-free',
+                denuvo: drmType === 'denuvo'
+            };
+
+            customGames.push(newGame);
+            saveCustomGames();
+            
+            showToast(`${name} added successfully!`);
+            document.getElementById('clearFormBtn').click();
+            
+            // Switch to browse tab and show custom section
+            document.querySelector('[data-tab="browse"]').click();
+            document.querySelector('[data-section="custom"]').click();
+            
+            updateCounts();
+            renderResults();
+        });
+
         // Initialize
+        loadCustomGames();
         updateCounts();
         renderResults();
     </script>

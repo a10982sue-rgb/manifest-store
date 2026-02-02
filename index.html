@@ -1,17 +1,10 @@
-# Steam Manifest Generator - Professional Edition
-
-Here's a complete, professional-grade Steam Manifest Generator with auto-download, rich UI, and full manifest + depot support:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steam Manifest Generator Pro</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Steam Manifest Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,592 +12,114 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
             box-sizing: border-box;
         }
 
-        :root {
-            --bg-primary: #0a0e17;
-            --bg-secondary: #111827;
-            --bg-tertiary: #1f2937;
-            --bg-card: #151c2c;
-            --bg-card-hover: #1a2332;
-            --accent-primary: #3b82f6;
-            --accent-secondary: #8b5cf6;
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            --accent-green: #10b981;
-            --accent-green-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --accent-orange: #f59e0b;
-            --accent-red: #ef4444;
-            --accent-pink: #ec4899;
-            --text-primary: #f9fafb;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --border-color: #374151;
-            --border-light: #4b5563;
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Background Effects */
-        .bg-effects {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-gradient-1 {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .bg-gradient-2 {
-            position: absolute;
-            bottom: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
-            animation: float 25s ease-in-out infinite reverse;
-        }
-
-        .bg-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(5deg); }
-            66% { transform: translate(-20px, 20px) rotate(-5deg); }
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            color: #fff;
             padding: 20px;
-            position: relative;
-            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         /* Header */
         header {
             text-align: center;
-            padding: 60px 20px;
-            position: relative;
+            padding: 40px 0;
         }
 
         .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .logo-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--accent-gradient);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 35px;
-            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
-            animation: pulse-glow 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 10px 60px rgba(59, 130, 246, 0.5); }
-        }
-
-        header h1 {
             font-size: 3rem;
-            font-weight: 800;
-            background: var(--accent-gradient);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
+            margin-bottom: 10px;
         }
 
-        header .tagline {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-top: 10px;
-            font-weight: 400;
-        }
-
-        .header-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Navigation Tabs */
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .nav-tab {
-            padding: 12px 28px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-tab:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--accent-primary);
-            color: var(--text-primary);
-        }
-
-        .nav-tab.active {
-            background: var(--accent-gradient);
-            border-color: transparent;
-            color: white;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-        }
-
-        .nav-tab .icon {
-            font-size: 1.2rem;
-        }
-
-        /* Search Section */
-        .search-section {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            position: relative;
-        }
-
-        .search-wrapper {
-            position: relative;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.3rem;
-            color: var(--text-muted);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 18px 20px 18px 55px;
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .search-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .search-shortcut {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--bg-tertiary);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Category Filter */
-        .category-filter {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .category-btn {
-            padding: 8px 18px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .category-btn:hover,
-        .category-btn.active {
-            background: var(--accent-primary);
-            border-color: var(--accent-primary);
-            color: white;
-        }
-
-        /* Games Grid */
-        .games-section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title .icon {
-            font-size: 1.8rem;
-        }
-
-        .games-count {
-            background: var(--bg-tertiary);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
         }
 
         /* Game Card */
         .game-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 0;
+            margin: 30px 0;
+            transition: all 0.3s ease;
         }
 
         .game-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--accent-primary);
-            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: #00d4ff;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
         }
 
-        .game-card:hover::before {
-            opacity: 0.05;
-        }
-
-        .game-card.selected {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
-        }
-
-        .game-card.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-            background: var(--accent-green-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            color: white;
-            z-index: 10;
-            animation: pop-in 0.3s ease;
-        }
-
-        @keyframes pop-in {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .game-card-image {
-            position: relative;
-            height: 135px;
-            overflow: hidden;
-        }
-
-        .game-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .game-card:hover .game-card-image img {
-            transform: scale(1.1);
-        }
-
-        .game-card-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60%;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-        }
-
-        .game-card-badges {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .badge-popular {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .badge-new {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .badge-aaa {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-        }
-
-        .game-card-content {
-            padding: 18px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .game-card-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .game-card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .game-appid {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: var(--bg-tertiary);
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--accent-primary);
-        }
-
-        .game-depots-count {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Game Details Panel */
-        .game-details-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            display: none;
-            animation: slide-down 0.4s ease;
-        }
-
-        .game-details-panel.visible {
-            display: block;
-        }
-
-        @keyframes slide-down {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .game-details-header {
+        .game-header {
             display: flex;
             gap: 25px;
             padding: 25px;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.3);
             flex-wrap: wrap;
         }
 
-        .game-details-image {
+        .game-image {
             width: 300px;
             height: 140px;
             border-radius: 12px;
-            overflow: hidden;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .game-details-image img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .game-details-info {
+        .game-info {
             flex: 1;
             min-width: 250px;
         }
 
-        .game-details-title {
+        .game-title {
             font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 10px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 15px;
+            color: #00d4ff;
         }
 
-        .game-details-stats {
+        .game-meta {
             display: flex;
-            gap: 25px;
-            margin-top: 15px;
             flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .detail-stat {
+        .meta-item {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 5px;
         }
 
-        .detail-stat-label {
+        .meta-label {
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .detail-stat-value {
+        .meta-value {
             font-size: 1.1rem;
             font-weight: 600;
-            color: var(--text-primary);
-            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+            font-family: monospace;
         }
 
-        .detail-stat-value.highlight {
-            color: var(--accent-primary);
+        .meta-value.highlight {
+            color: #00d4ff;
         }
 
         /* Depots Section */
@@ -612,272 +127,174 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
             padding: 25px;
         }
 
-        .depots-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .section-title {
+            font-size: 1.3rem;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .depots-title {
-            font-size: 1.2rem;
-            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .depots-title .icon {
-            font-size: 1.4rem;
-        }
-
-        .select-all-btn {
-            padding: 8px 16px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .select-all-btn:hover {
-            background: var(--accent-primary);
-            border-color: var(--accent-primary);
-            color: white;
         }
 
         .depots-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 12px;
         }
 
         .depot-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 14px 16px;
+            padding: 15px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .depot-item:hover {
-            border-color: var(--accent-primary);
-            background: var(--bg-tertiary);
-        }
-
-        .depot-item.selected {
-            border-color: var(--accent-green);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .depot-checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border-light);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .depot-item.selected .depot-checkbox {
-            background: var(--accent-green-gradient);
-            border-color: var(--accent-green);
-        }
-
-        .depot-item.selected .depot-checkbox::after {
-            content: '✓';
-            color: white;
-            font-size: 0.8rem;
-        }
-
-        .depot-info {
-            flex: 1;
-            min-width: 0;
         }
 
         .depot-id {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-primary);
-            font-weight: 500;
+            font-family: monospace;
+            font-size: 1rem;
+            color: #00d4ff;
+            font-weight: 600;
         }
 
         .depot-name {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 0.85rem;
+            color: #888;
         }
 
         .depot-size {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--bg-tertiary);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #666;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 5px;
         }
 
-        /* Generate Button Section */
+        /* Generate Section */
         .generate-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 30px;
-            margin-bottom: 30px;
+            margin: 30px 0;
         }
 
-        .generate-options {
+        .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-bottom: 25px;
         }
 
-        .option-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .option-label {
+        .option-group label {
+            display: block;
             font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-weight: 500;
+            color: #888;
+            margin-bottom: 8px;
         }
 
-        .option-select {
+        .option-group select {
+            width: 100%;
             padding: 12px 15px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            color: var(--text-primary);
+            color: #fff;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .option-select:focus {
+        .option-group select:focus {
             outline: none;
-            border-color: var(--accent-primary);
+            border-color: #00d4ff;
         }
 
-        .option-checkbox {
+        .checkbox-option {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 12px 15px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .option-checkbox:hover {
-            border-color: var(--accent-primary);
-        }
-
-        .option-checkbox input {
+        .checkbox-option input {
             width: 18px;
             height: 18px;
-            accent-color: var(--accent-primary);
+            accent-color: #00d4ff;
         }
 
-        .option-checkbox span {
-            font-size: 0.95rem;
-            color: var(--text-primary);
-        }
-
-        .generate-buttons {
+        .buttons-row {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 16px 32px;
+            padding: 15px 30px;
             border: none;
             border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 10px;
+            transition: all 0.3s ease;
             font-family: inherit;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
         .btn-primary {
-            background: var(--accent-gradient);
-            color: white;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            color: #fff;
             flex: 1;
             justify-content: center;
-            min-width: 200px;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary:hover {
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
         }
 
         .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .btn-secondary:hover {
-            background: var(--bg-secondary);
-            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .btn-success {
-            background: var(--accent-green-gradient);
-            color: white;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            background: linear-gradient(135deg, #00c851, #007e33);
+            color: #fff;
         }
 
-        .btn-icon {
-            font-size: 1.2rem;
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 200, 81, 0.4);
         }
 
         /* Output Section */
         .output-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             overflow: hidden;
+            margin: 30px 0;
             display: none;
-            animation: fade-in 0.5s ease;
         }
 
         .output-section.visible {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
 
-        @keyframes fade-in {
+        @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
@@ -887,8 +304,8 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
             justify-content: space-between;
             align-items: center;
             padding: 20px 25px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -896,56 +313,48 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
         .output-title {
             font-size: 1.2rem;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .output-actions {
+        .output-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
         .btn-sm {
-            padding: 10px 18px;
+            padding: 10px 20px;
             font-size: 0.9rem;
         }
 
         .output-tabs {
             display: flex;
-            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .output-tab {
             padding: 15px 25px;
-            background: transparent;
+            background: none;
             border: none;
-            color: var(--text-secondary);
+            color: #888;
             font-size: 0.95rem;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
             font-family: inherit;
         }
 
         .output-tab:hover {
-            color: var(--text-primary);
-            background: var(--bg-secondary);
+            color: #fff;
         }
 
         .output-tab.active {
-            color: var(--accent-primary);
-            border-bottom-color: var(--accent-primary);
-            background: var(--bg-secondary);
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
         }
 
-        .output-content {
-            padding: 0;
-        }
-
-        .code-block {
+        .code-container {
             background: #0d1117;
             padding: 25px;
             overflow-x: auto;
@@ -953,35 +362,19 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
             overflow-y: auto;
         }
 
-        .code-block pre {
-            font-family: 'JetBrains Mono', monospace;
+        .code-container pre {
+            font-family: 'Consolas', 'Monaco', monospace;
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #e6edf3;
+            color: #c9d1d9;
             margin: 0;
             white-space: pre;
         }
 
-        .code-block .comment {
-            color: #8b949e;
-        }
-
-        .code-block .string {
-            color: #a5d6ff;
-        }
-
-        .code-block .key {
-            color: #7ee787;
-        }
-
-        .code-block .number {
-            color: #79c0ff;
-        }
-
         .output-footer {
             padding: 15px 25px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -989,273 +382,74 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
             gap: 10px;
         }
 
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
         .file-name {
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--bg-tertiary);
+            font-family: monospace;
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
             padding: 8px 15px;
             border-radius: 8px;
-            font-size: 0.9rem;
-            color: var(--accent-primary);
         }
 
-        .file-size {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Toast Notifications */
-        .toast-container {
+        /* Toast */
+        .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 16px 24px;
+            padding: 20px 25px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: var(--shadow-lg);
-            animation: toast-in 0.4s ease;
-            min-width: 300px;
+            gap: 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
         }
 
-        .toast.toast-out {
-            animation: toast-out 0.4s ease forwards;
-        }
-
-        @keyframes toast-in {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes toast-out {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(100px);
-            }
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .toast-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
 
-        .toast-success .toast-icon {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-green);
+        .toast-success {
+            border-left: 4px solid #00c851;
         }
 
-        .toast-error .toast-icon {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--accent-red);
-        }
-
-        .toast-info .toast-icon {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--accent-primary);
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .toast-message {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--bg-tertiary);
-            z-index: 999;
-            display: none;
-        }
-
-        .progress-container.active {
-            display: block;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: var(--accent-gradient);
-            width: 0;
-            transition: width 0.3s ease;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--border-light);
+        .toast-error {
+            border-left: 4px solid #ff4444;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 50px 20px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 50px;
+            padding: 40px 20px;
+            color: #666;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 40px;
         }
 
-        .footer-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .footer-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--accent-primary);
-        }
-
-        /* Loading State */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--accent-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-
-        .empty-state-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .empty-state-text {
-            color: var(--text-muted);
-            max-width: 400px;
-            margin: 0 auto;
+        footer code {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            padding: 3px 10px;
+            border-radius: 5px;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
             }
 
-            .header-stats {
-                gap: 20px;
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
-            }
-
-            .game-details-image {
+            .game-image {
                 width: 100%;
-            }
-
-            .games-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-
-            .generate-buttons {
-                flex-direction: column;
             }
 
             .btn {
@@ -1263,773 +457,459 @@ Here's a complete, professional-grade Steam Manifest Generator with auto-downloa
                 justify-content: center;
             }
 
-            .toast-container {
-                left: 15px;
-                right: 15px;
-                bottom: 15px;
-            }
-
             .toast {
-                min-width: auto;
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
             }
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            padding: 20px;
-        }
-
-        .modal-overlay.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.visible .modal {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            padding: 25px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-tertiary);
-            border: none;
-            border-radius: 10px;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            background: var(--accent-red);
-            color: white;
-        }
-
-        .modal-body {
-            padding: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .modal-footer {
-            padding: 20px 25px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
         }
     </style>
 </head>
 <body>
-    <!-- Background Effects -->
-    <div class="bg-effects">
-        <div class="bg-gradient-1"></div>
-        <div class="bg-gradient-2"></div>
-        <div class="bg-grid"></div>
-    </div>
-
     <div class="container">
         <!-- Header -->
         <header>
-            <div class="logo">
-                <div class="logo-icon">🎮</div>
-            </div>
+            <div class="logo">🎮</div>
             <h1>Steam Manifest Generator</h1>
-            <p class="tagline">Professional manifest & depot file generator for Steam games</p>
-            <div class="header-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalGames">25</div>
-                    <div class="stat-label">Games</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalDepots">150+</div>
-                    <div class="stat-label">Depots</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">2</div>
-                    <div class="stat-label">File Types</div>
-                </div>
-            </div>
+            <p class="subtitle">Generate manifest and depot files for GTA V</p>
         </header>
 
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" data-tab="games">
-                <span class="icon">🎮</span>
-                <span>Select Game</span>
-            </button>
-            <button class="nav-tab" data-tab="custom">
-                <span class="icon">✏️</span>
-                <span>Custom Entry</span>
-            </button>
-            <button class="nav-tab" data-tab="help">
-                <span class="icon">❓</span>
-                <span>Help</span>
-            </button>
-        </div>
-
-        <!-- Search Section -->
-        <div class="search-section" id="searchSection">
-            <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search games by name or App ID...">
-                <span class="search-shortcut">Ctrl+K</span>
-            </div>
-        </div>
-
-        <!-- Category Filter -->
-        <div class="category-filter" id="categoryFilter">
-            <button class="category-btn active" data-category="all">All Games</button>
-            <button class="category-btn" data-category="popular">🔥 Popular</button>
-            <button class="category-btn" data-category="aaa">⭐ AAA</button>
-            <button class="category-btn" data-category="multiplayer">👥 Multiplayer</button>
-            <button class="category-btn" data-category="singleplayer">🎯 Single Player</button>
-        </div>
-
-        <!-- Games Section -->
-        <section class="games-section" id="gamesSection">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="icon">📚</span>
-                    Game Library
-                </h2>
-                <span class="games-count" id="gamesCount">25 games available</span>
-            </div>
-            <div class="games-grid" id="gamesGrid">
-                <!-- Games will be inserted here -->
-            </div>
-        </section>
-
-        <!-- Game Details Panel -->
-        <section class="game-details-panel" id="gameDetailsPanel">
-            <div class="game-details-header">
-                <div class="game-details-image">
-                    <img id="detailImage" src="" alt="">
-                </div>
-                <div class="game-details-info">
-                    <h2 class="game-details-title" id="detailTitle"></h2>
-                    <div class="game-details-stats">
-                        <div class="detail-stat">
-                            <span class="detail-stat-label">App ID</span>
-                            <span class="detail-stat-value highlight" id="detailAppId"></span>
+        <!-- Game Card -->
+        <div class="game-card">
+            <div class="game-header">
+                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg" 
+                     alt="Grand Theft Auto V" 
+                     class="game-image"
+                     onerror="this.src='https://via.placeholder.com/460x215/1a1a2e/00d4ff?text=GTA+V'">
+                <div class="game-info">
+                    <h2 class="game-title">Grand Theft Auto V</h2>
+                    <div class="game-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">App ID</span>
+                            <span class="meta-value highlight">271590</span>
                         </div>
-                        <div class="detail-stat">
-                            <span class="detail-stat-label">Install Directory</span>
-                            <span class="detail-stat-value" id="detailInstallDir"></span>
+                        <div class="meta-item">
+                            <span class="meta-label">Install Directory</span>
+                            <span class="meta-value">Grand Theft Auto V</span>
                         </div>
-                        <div class="detail-stat">
-                            <span class="detail-stat-label">Depots</span>
-                            <span class="detail-stat-value" id="detailDepotCount"></span>
+                        <div class="meta-item">
+                            <span class="meta-label">Depots</span>
+                            <span class="meta-value">17 depots</span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Depots -->
             <div class="depots-section">
-                <div class="depots-header">
-                    <h3 class="depots-title">
-                        <span class="icon">📦</span>
-                        Available Depots
-                    </h3>
-                    <button class="select-all-btn" id="selectAllDepots">Select All</button>
-                </div>
+                <h3 class="section-title">📦 Game Depots</h3>
                 <div class="depots-grid" id="depotsGrid">
                     <!-- Depots will be inserted here -->
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- Generate Section -->
-        <section class="generate-section" id="generateSection">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="icon">⚙️</span>
-                    Generation Settings
-                </h2>
-            </div>
-            <div class="generate-options">
+        <div class="generate-section">
+            <h3 class="section-title">⚙️ Generation Options</h3>
+            <div class="options-grid">
                 <div class="option-group">
-                    <label class="option-label">State Flags</label>
-                    <select class="option-select" id="stateFlags">
+                    <label>State Flags</label>
+                    <select id="stateFlags">
                         <option value="4">4 - Fully Installed</option>
                         <option value="2">2 - Update Required</option>
                         <option value="6">6 - Update Paused</option>
-                        <option value="1026">1026 - Downloading</option>
                     </select>
                 </div>
                 <div class="option-group">
-                    <label class="option-label">Auto Update</label>
-                    <select class="option-select" id="autoUpdate">
+                    <label>Auto Update</label>
+                    <select id="autoUpdate">
                         <option value="0">Always Update</option>
                         <option value="1">Update on Launch</option>
                         <option value="2">High Priority</option>
                     </select>
                 </div>
                 <div class="option-group">
-                    <label class="option-label">Output Format</label>
-                    <select class="option-select" id="outputFormat">
-                        <option value="vdf">VDF (Steam Default)</option>
+                    <label>Output Format</label>
+                    <select id="outputFormat">
+                        <option value="acf">ACF (Steam Manifest)</option>
                         <option value="lua">Lua Table</option>
+                        <option value="both">Both Files</option>
                     </select>
                 </div>
                 <div class="option-group">
-                    <label class="option-checkbox">
+                    <label class="checkbox-option">
                         <input type="checkbox" id="includeDepots" checked>
-                        <span>Include Depots</span>
-                    </label>
-                </div>
-                <div class="option-group">
-                    <label class="option-checkbox">
-                        <input type="checkbox" id="autoDownload" checked>
-                        <span>Auto Download</span>
-                    </label>
-                </div>
-                <div class="option-group">
-                    <label class="option-checkbox">
-                        <input type="checkbox" id="generateBoth">
-                        <span>Generate Both Files</span>
+                        <span>Include Depot Info</span>
                     </label>
                 </div>
             </div>
-            <div class="generate-buttons">
+            <div class="buttons-row">
                 <button class="btn btn-primary" id="generateBtn">
-                    <span class="btn-icon">🚀</span>
-                    Generate Manifest
+                    🚀 Generate & Download
                 </button>
-                <button class="btn btn-secondary" id="resetBtn">
-                    <span class="btn-icon">🔄</span>
-                    Reset
+                <button class="btn btn-secondary" id="previewBtn">
+                    👁️ Preview Only
                 </button>
             </div>
-        </section>
+        </div>
 
         <!-- Output Section -->
-        <section class="output-section" id="outputSection">
+        <div class="output-section" id="outputSection">
             <div class="output-header">
-                <h2 class="output-title">
-                    <span>📄</span>
-                    Generated Files
-                </h2>
-                <div class="output-actions">
-                    <button class="btn btn-sm btn-secondary" id="copyBtn">
-                        <span>📋</span> Copy
-                    </button>
-                    <button class="btn btn-sm btn-success" id="downloadBtn">
-                        <span>⬇️</span> Download
-                    </button>
-                    <button class="btn btn-sm btn-secondary" id="downloadAllBtn" style="display:none;">
-                        <span>📥</span> Download All
-                    </button>
+                <span class="output-title">📄 Generated Files</span>
+                <div class="output-buttons">
+                    <button class="btn btn-sm btn-secondary" id="copyBtn">📋 Copy</button>
+                    <button class="btn btn-sm btn-success" id="manualDownloadBtn">⬇️ Download</button>
                 </div>
             </div>
-            <div class="output-tabs" id="outputTabs">
-                <button class="output-tab active" data-output="manifest">appmanifest.acf</button>
-                <button class="output-tab" data-output="lua" style="display:none;">manifest.lua</button>
+            <div class="output-tabs">
+                <button class="output-tab active" data-tab="acf">appmanifest_271590.acf</button>
+                <button class="output-tab" data-tab="lua" id="luaTab" style="display:none;">manifest.lua</button>
             </div>
-            <div class="output-content">
-                <div class="code-block">
-                    <pre id="codeOutput"></pre>
-                </div>
+            <div class="code-container">
+                <pre id="codeOutput"></pre>
             </div>
             <div class="output-footer">
-                <div class="file-info">
-                    <span class="file-name" id="fileName">appmanifest_271590.acf</span>
-                    <span class="file-size" id="fileSize">2.4 KB</span>
-                </div>
+                <span class="file-name" id="fileName">appmanifest_271590.acf</span>
             </div>
-        </section>
+        </div>
 
         <!-- Footer -->
         <footer>
-            <div class="footer-content">
-                <div class="footer-logo">Steam Manifest Generator</div>
-                <p class="footer-text">
-                    Place generated files in <code style="background: var(--bg-tertiary); padding: 2px 8px; border-radius: 4px; color: var(--accent-primary);">Steam/steamapps/</code>
-                    <br>⚠️ For educational purposes only
-                </p>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">GitHub</a>
-                    <a href="#" class="footer-link">Documentation</a>
-                    <a href="#" class="footer-link">Report Issue</a>
-                </div>
-            </div>
+            <p>📁 Place files in: <code>Steam/steamapps/</code></p>
+            <p style="margin-top: 10px;">⚠️ For educational purposes only</p>
         </footer>
     </div>
 
-    <!-- Custom Game Modal -->
-    <div class="modal-overlay" id="customModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Add Custom Game</h3>
-                <button class="modal-close" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">App ID *</label>
-                    <input type="text" class="form-input" id="customAppId" placeholder="e.g., 271590">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Game Name *</label>
-                    <input type="text" class="form-input" id="customName" placeholder="e.g., Grand Theft Auto V">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Install Directory *</label>
-                    <input type="text" class="form-input" id="customInstallDir" placeholder="e.g., Grand Theft Auto V">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Depot IDs (comma separated)</label>
-                    <input type="text" class="form-input" id="customDepots" placeholder="e.g., 271591, 271592, 271593">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelModal">Cancel</button>
-                <button class="btn btn-primary" id="addCustomGame">Add Game</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Progress Bar -->
-    <div class="progress-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✅</span>
+        <span class="toast-message" id="toastMessage">File downloaded!</span>
     </div>
 
     <script>
         // ============================================
-        // GAMES DATABASE
+        // GTA V DATA
         // ============================================
-        const gamesDatabase = [
-            {
-                appid: "271590",
-                name: "Grand Theft Auto V",
-                installdir: "Grand Theft Auto V",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
-                category: ["popular", "aaa", "multiplayer", "singleplayer"],
-                badges: ["popular", "aaa"],
-                depots: [
-                    { id: "271591", name: "GTA V Content", size: "45.2 GB", manifest: "7509459829897106041" },
-                    { id: "271592", name: "GTA V Win64 Binaries", size: "892 MB", manifest: "3022446239772226811" },
-                    { id: "271593", name: "GTA V Update", size: "12.1 GB", manifest: "8160954967771206453" },
-                    { id: "271594", name: "GTA V x64 Content", size: "8.4 GB", manifest: "5765066873053252995" },
-                    { id: "271595", name: "Audio - General", size: "4.2 GB", manifest: "1234567890123456789" },
-                    { id: "271596", name: "Audio - American", size: "1.8 GB", manifest: "2345678901234567890" },
-                    { id: "271597", name: "Audio - French", size: "1.6 GB", manifest: "3456789012345678901" },
-                    { id: "271598", name: "Audio - German", size: "1.7 GB", manifest: "4567890123456789012" },
-                    { id: "271599", name: "Audio - Italian", size: "1.5 GB", manifest: "5678901234567890123" },
-                    { id: "271600", name: "Audio - Spanish", size: "1.6 GB", manifest: "6789012345678901234" },
-                    { id: "271601", name: "Audio - Japanese", size: "1.4 GB", manifest: "7890123456789012345" },
-                    { id: "271602", name: "Audio - Mexican", size: "1.3 GB", manifest: "8901234567890123456" },
-                    { id: "271603", name: "Audio - Polish", size: "1.5 GB", manifest: "9012345678901234567" },
-                    { id: "271604", name: "Audio - Portuguese", size: "1.4 GB", manifest: "0123456789012345678" },
-                    { id: "271605", name: "Audio - Russian", size: "1.6 GB", manifest: "1234567890123456780" },
-                    { id: "271606", name: "Audio - Chinese", size: "1.3 GB", manifest: "2345678901234567891" },
-                    { id: "271607", name: "Audio - Korean", size: "1.2 GB", manifest: "3456789012345678902" }
-                ]
-            },
-            {
-                appid: "730",
-                name: "Counter-Strike 2",
-                installdir: "Counter-Strike Global Offensive",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: ["popular"],
-                depots: [
-                    { id: "731", name: "CS2 Content", size: "25.8 GB", manifest: "4884093979484948123" },
-                    { id: "732", name: "CS2 Binaries Win64", size: "456 MB", manifest: "7765432198765432198" },
-                    { id: "733", name: "CS2 Low Violence", size: "124 MB", manifest: "8876543219876543219" },
-                    { id: "734", name: "CS2 Common Content", size: "2.1 GB", manifest: "9987654321987654321" }
-                ]
-            },
-            {
-                appid: "1174180",
-                name: "Red Dead Redemption 2",
-                installdir: "Red Dead Redemption 2",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
-                category: ["popular", "aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1174181", name: "RDR2 Main Content", size: "89.5 GB", manifest: "5544332211009988776" },
-                    { id: "1174182", name: "RDR2 Binaries Win64", size: "1.2 GB", manifest: "6655443322110099887" },
-                    { id: "1174183", name: "RDR2 Content Disk 1", size: "32.4 GB", manifest: "7766554433221100998" },
-                    { id: "1174184", name: "RDR2 Content Disk 2", size: "28.7 GB", manifest: "8877665544332211009" },
-                    { id: "1174185", name: "RDR2 Content Disk 3", size: "24.3 GB", manifest: "9988776655443322110" },
-                    { id: "1174186", name: "RDR2 Content Disk 4", size: "18.9 GB", manifest: "0099887766554433221" }
-                ]
-            },
-            {
-                appid: "1245620",
-                name: "Elden Ring",
-                installdir: "ELDEN RING",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
-                category: ["popular", "aaa", "singleplayer"],
-                badges: ["popular", "aaa"],
-                depots: [
-                    { id: "1245621", name: "Elden Ring Content", size: "48.2 GB", manifest: "1122334455667788990" },
-                    { id: "1245622", name: "Elden Ring Binaries", size: "312 MB", manifest: "2233445566778899001" },
-                    { id: "1245623", name: "Elden Ring DLC Content", size: "16.8 GB", manifest: "3344556677889900112" },
-                    { id: "1245624", name: "Elden Ring Languages", size: "4.2 GB", manifest: "4455667788990011223" }
-                ]
-            },
-            {
-                appid: "1091500",
-                name: "Cyberpunk 2077",
-                installdir: "Cyberpunk 2077",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1091501", name: "Cyberpunk Content", size: "65.4 GB", manifest: "5566778899001122334" },
-                    { id: "1091502", name: "Cyberpunk Binaries", size: "892 MB", manifest: "6677889900112233445" },
-                    { id: "1091503", name: "Cyberpunk Common", size: "12.3 GB", manifest: "7788990011223344556" },
-                    { id: "1091504", name: "Cyberpunk English", size: "3.8 GB", manifest: "8899001122334455667" },
-                    { id: "1091505", name: "Phantom Liberty DLC", size: "24.6 GB", manifest: "9900112233445566778" }
-                ]
-            },
-            {
-                appid: "570",
-                name: "Dota 2",
-                installdir: "dota 2 beta",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: ["popular"],
-                depots: [
-                    { id: "571", name: "Dota 2 Content", size: "32.1 GB", manifest: "0011223344556677889" },
-                    { id: "572", name: "Dota 2 Win64", size: "678 MB", manifest: "1122334455667788900" },
-                    { id: "573", name: "Dota 2 Common", size: "4.5 GB", manifest: "2233445566778899011" }
-                ]
-            },
-            {
-                appid: "440",
-                name: "Team Fortress 2",
-                installdir: "Team Fortress 2",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/440/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: [],
-                depots: [
-                    { id: "441", name: "TF2 Content", size: "18.4 GB", manifest: "3344556677889900122" },
-                    { id: "442", name: "TF2 Binaries", size: "234 MB", manifest: "4455667788990011233" },
-                    { id: "443", name: "TF2 Materials", size: "6.7 GB", manifest: "5566778899001122344" }
-                ]
-            },
-            {
-                appid: "1599340",
-                name: "Lost Ark",
-                installdir: "Lost Ark",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1599340/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: ["popular"],
-                depots: [
-                    { id: "1599341", name: "Lost Ark Content", size: "72.3 GB", manifest: "6677889900112233455" },
-                    { id: "1599342", name: "Lost Ark Binaries", size: "1.1 GB", manifest: "7788990011223344566" },
-                    { id: "1599343", name: "Lost Ark English", size: "2.8 GB", manifest: "8899001122334455677" }
-                ]
-            },
-            {
-                appid: "252490",
-                name: "Rust",
-                installdir: "Rust",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: ["popular"],
-                depots: [
-                    { id: "252491", name: "Rust Content", size: "21.4 GB", manifest: "9900112233445566788" },
-                    { id: "252492", name: "Rust Win64 Binaries", size: "456 MB", manifest: "0011223344556677899" },
-                    { id: "252493", name: "Rust Dedicated Server", size: "3.2 GB", manifest: "1122334455667788910" }
-                ]
-            },
-            {
-                appid: "578080",
-                name: "PUBG: BATTLEGROUNDS",
-                installdir: "PUBG",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: [],
-                depots: [
-                    { id: "578081", name: "PUBG Content", size: "38.9 GB", manifest: "2233445566778899021" },
-                    { id: "578082", name: "PUBG Binaries", size: "892 MB", manifest: "3344556677889900132" },
-                    { id: "578083", name: "PUBG Common", size: "5.6 GB", manifest: "4455667788990011243" }
-                ]
-            },
-            {
-                appid: "892970",
-                name: "Valheim",
-                installdir: "Valheim",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/892970/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: ["popular"],
-                depots: [
-                    { id: "892971", name: "Valheim Content", size: "1.2 GB", manifest: "5566778899001122354" },
-                    { id: "892972", name: "Valheim Binaries", size: "124 MB", manifest: "6677889900112233465" }
-                ]
-            },
-            {
-                appid: "1172470",
-                name: "Apex Legends",
-                installdir: "Apex Legends",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: ["popular"],
-                depots: [
-                    { id: "1172471", name: "Apex Content", size: "68.4 GB", manifest: "7788990011223344576" },
-                    { id: "1172472", name: "Apex Binaries", size: "1.3 GB", manifest: "8899001122334455687" },
-                    { id: "1172473", name: "Apex Common", size: "8.7 GB", manifest: "9900112233445566798" }
-                ]
-            },
-            {
-                appid: "1085660",
-                name: "Destiny 2",
-                installdir: "Destiny 2",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1085660/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: [],
-                depots: [
-                    { id: "1085661", name: "Destiny 2 Content", size: "98.2 GB", manifest: "0011223344556677809" },
-                    { id: "1085662", name: "Destiny 2 Binaries", size: "1.5 GB", manifest: "1122334455667788920" },
-                    { id: "1085663", name: "Destiny 2 English", size: "4.3 GB", manifest: "2233445566778899031" }
-                ]
-            },
-            {
-                appid: "381210",
-                name: "Dead by Daylight",
-                installdir: "Dead by Daylight",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/381210/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: [],
-                depots: [
-                    { id: "381211", name: "DbD Content", size: "42.1 GB", manifest: "3344556677889900142" },
-                    { id: "381212", name: "DbD Binaries", size: "567 MB", manifest: "4455667788990011253" },
-                    { id: "381213", name: "DbD Common", size: "3.4 GB", manifest: "5566778899001122364" }
-                ]
-            },
-            {
-                appid: "1623730",
-                name: "Palworld",
-                installdir: "Palworld",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg",
-                category: ["popular", "multiplayer", "singleplayer"],
-                badges: ["popular", "new"],
-                depots: [
-                    { id: "1623731", name: "Palworld Content", size: "18.7 GB", manifest: "6677889900112233475" },
-                    { id: "1623732", name: "Palworld Binaries", size: "234 MB", manifest: "7788990011223344586" }
-                ]
-            },
-            {
-                appid: "1938090",
-                name: "Call of Duty: Modern Warfare III",
-                installdir: "Call of Duty",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
-                category: ["aaa", "multiplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1938091", name: "CoD MW3 Content", size: "125.4 GB", manifest: "8899001122334455697" },
-                    { id: "1938092", name: "CoD MW3 Binaries", size: "2.1 GB", manifest: "9900112233445566708" },
-                    { id: "1938093", name: "CoD MW3 Common", size: "15.8 GB", manifest: "0011223344556677819" }
-                ]
-            },
-            {
-                appid: "2357570",
-                name: "Overwatch 2",
-                installdir: "Overwatch",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/2357570/header.jpg",
-                category: ["popular", "multiplayer"],
-                badges: [],
-                depots: [
-                    { id: "2357571", name: "Overwatch 2 Content", size: "45.6 GB", manifest: "1122334455667788931" },
-                    { id: "2357572", name: "Overwatch 2 Binaries", size: "1.8 GB", manifest: "2233445566778899042" }
-                ]
-            },
-            {
-                appid: "1693980",
-                name: "Ghost of Tsushima",
-                installdir: "Ghost of Tsushima DIRECTOR'S CUT",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1693980/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1693981", name: "GoT Content", size: "56.8 GB", manifest: "3344556677889900153" },
-                    { id: "1693982", name: "GoT Binaries", size: "892 MB", manifest: "4455667788990011264" },
-                    { id: "1693983", name: "GoT English", size: "2.4 GB", manifest: "5566778899001122375" }
-                ]
-            },
-            {
-                appid: "2050650",
-                name: "Resident Evil 4",
-                installdir: "Resident Evil 4",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "2050651", name: "RE4 Content", size: "58.3 GB", manifest: "6677889900112233486" },
-                    { id: "2050652", name: "RE4 Binaries", size: "456 MB", manifest: "7788990011223344597" },
-                    { id: "2050653", name: "RE4 Extra Content", size: "8.9 GB", manifest: "8899001122334455608" }
-                ]
-            },
-            {
-                appid: "1817070",
-                name: "Marvel's Spider-Man Remastered",
-                installdir: "Marvel's Spider-Man Remastered",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1817071", name: "Spider-Man Content", size: "62.4 GB", manifest: "9900112233445566719" },
-                    { id: "1817072", name: "Spider-Man Binaries", size: "1.1 GB", manifest: "0011223344556677830" }
-                ]
-            },
-            {
-                appid: "1817190",
-                name: "Marvel's Spider-Man: Miles Morales",
-                installdir: "Marvel's Spider-Man Miles Morales",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1817190/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1817191", name: "Miles Morales Content", size: "48.7 GB", manifest: "1122334455667788941" },
-                    { id: "1817192", name: "Miles Morales Binaries", size: "987 MB", manifest: "2233445566778899052" }
-                ]
-            },
-            {
-                appid: "1245040",
-                name: "Alan Wake 2",
-                installdir: "Alan Wake 2",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1245040/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["new", "aaa"],
-                depots: [
-                    { id: "1245041", name: "Alan Wake 2 Content", size: "82.5 GB", manifest: "3344556677889900163" },
-                    { id: "1245042", name: "Alan Wake 2 Binaries", size: "1.4 GB", manifest: "4455667788990011274" }
-                ]
-            },
-            {
-                appid: "1888160",
-                name: "ARMORED CORE VI",
-                installdir: "ARMORED CORE VI FIRES OF RUBICON",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1888160/header.jpg",
-                category: ["aaa", "singleplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1888161", name: "AC6 Content", size: "45.2 GB", manifest: "5566778899001122385" },
-                    { id: "1888162", name: "AC6 Binaries", size: "678 MB", manifest: "6677889900112233496" }
-                ]
-            },
-            {
-                appid: "1086940",
-                name: "Baldur's Gate 3",
-                installdir: "Baldurs Gate 3",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg",
-                category: ["popular", "aaa", "singleplayer"],
-                badges: ["popular", "aaa"],
-                depots: [
-                    { id: "1086941", name: "BG3 Content", size: "122.4 GB", manifest: "7788990011223344507" },
-                    { id: "1086942", name: "BG3 Binaries", size: "2.3 GB", manifest: "8899001122334455618" },
-                    { id: "1086943", name: "BG3 Engine", size: "8.9 GB", manifest: "9900112233445566729" }
-                ]
-            },
-            {
-                appid: "1551360",
-                name: "Forza Horizon 5",
-                installdir: "Forza Horizon 5",
-                icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
-                category: ["popular", "aaa", "multiplayer"],
-                badges: ["aaa"],
-                depots: [
-                    { id: "1551361", name: "FH5 Content", size: "98.7 GB", manifest: "0011223344556677840" },
-                    { id: "1551362", name: "FH5 Binaries", size: "1.6 GB", manifest: "1122334455667788951" }
-                ]
-            }
-        ];
+        const gtaV = {
+            appid: "271590",
+            name: "Grand Theft Auto V",
+            installdir: "Grand Theft Auto V",
+            depots: [
+                { id: "271591", name: "GTA V Content", size: "45.2 GB", manifest: "7509459829897106041" },
+                { id: "271592", name: "Win64 Binaries", size: "892 MB", manifest: "3022446239772226811" },
+                { id: "271593", name: "Update Content", size: "12.1 GB", manifest: "8160954967771206453" },
+                { id: "271594", name: "x64 Content", size: "8.4 GB", manifest: "5765066873053252995" },
+                { id: "271595", name: "Audio General", size: "4.2 GB", manifest: "1234567890123456789" },
+                { id: "271596", name: "Audio American", size: "1.8 GB", manifest: "2345678901234567890" },
+                { id: "271597", name: "Audio French", size: "1.6 GB", manifest: "3456789012345678901" },
+                { id: "271598", name: "Audio German", size: "1.7 GB", manifest: "4567890123456789012" },
+                { id: "271599", name: "Audio Italian", size: "1.5 GB", manifest: "5678901234567890123" },
+                { id: "271600", name: "Audio Spanish", size: "1.6 GB", manifest: "6789012345678901234" },
+                { id: "271601", name: "Audio Japanese", size: "1.4 GB", manifest: "7890123456789012345" },
+                { id: "271602", name: "Audio Mexican", size: "1.3 GB", manifest: "8901234567890123456" },
+                { id: "271603", name: "Audio Polish", size: "1.5 GB", manifest: "9012345678901234567" },
+                { id: "271604", name: "Audio Portuguese", size: "1.4 GB", manifest: "0123456789012345678" },
+                { id: "271605", name: "Audio Russian", size: "1.6 GB", manifest: "1234567890123456780" },
+                { id: "271606", name: "Audio Chinese", size: "1.3 GB", manifest: "2345678901234567891" },
+                { id: "271607", name: "Audio Korean", size: "1.2 GB", manifest: "3456789012345678902" }
+            ]
+        };
 
         // ============================================
-        // APPLICATION STATE
+        // STATE
         // ============================================
-        let selectedGame = null;
-        let selectedDepots = [];
-        let generatedManifest = '';
+        let generatedACF = '';
         let generatedLua = '';
-        let currentOutputTab = 'manifest';
+        let currentTab = 'acf';
 
         // ============================================
         // DOM ELEMENTS
         // ============================================
-        const elements = {
-            searchInput: document.getElementById('searchInput'),
-            gamesGrid: document.getElementById('gamesGrid'),
-            gamesCount: document.getElementById('gamesCount'),
-            gameDetailsPanel: document.getElementById('gameDetailsPanel'),
-            detailImage: document.getElementById('detailImage'),
-            detailTitle: document.getElementById('detailTitle'),
-            detailAppId: document.getElementById('detailAppId'),
-            detailInstallDir: document.getElementById('detailInstallDir'),
-            detailDepotCount: document.getElementById('detailDepotCount'),
-            depotsGrid
+        const depotsGrid = document.getElementById('depotsGrid');
+        const outputSection = document.getElementById('outputSection');
+        const codeOutput = document.getElementById('codeOutput');
+        const fileName = document.getElementById('fileName');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const luaTab = document.getElementById('luaTab');
+
+        // ============================================
+        // RENDER DEPOTS
+        // ============================================
+        function renderDepots() {
+            depotsGrid.innerHTML = gtaV.depots.map(depot => `
+                <div class="depot-item">
+                    <div>
+                        <div class="depot-id">${depot.id}</div>
+                        <div class="depot-name">${depot.name}</div>
+                    </div>
+                    <span class="depot-size">${depot.size}</span>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // GENERATE ACF MANIFEST
+        // ============================================
+        function generateACF() {
+            const stateFlags = document.getElementById('stateFlags').value;
+            const autoUpdate = document.getElementById('autoUpdate').value;
+            const includeDepots = document.getElementById('includeDepots').checked;
+            const timestamp = Math.floor(Date.now() / 1000);
+
+            let depotsSection = '';
+            if (includeDepots) {
+                const depotEntries = gtaV.depots.map(depot => 
+                    `\t\t"${depot.id}"\n\t\t{\n\t\t\t"manifest"\t\t"${depot.manifest}"\n\t\t\t"size"\t\t"0"\n\t\t}`
+                ).join('\n');
+                depotsSection = depotEntries;
+            }
+
+            generatedACF = `"AppState"
+{
+\t"appid"\t\t"${gtaV.appid}"
+\t"Universe"\t\t"1"
+\t"name"\t\t"${gtaV.name}"
+\t"StateFlags"\t\t"${stateFlags}"
+\t"installdir"\t\t"${gtaV.installdir}"
+\t"LastUpdated"\t\t"${timestamp}"
+\t"SizeOnDisk"\t\t"0"
+\t"StagingSize"\t\t"0"
+\t"buildid"\t\t"0"
+\t"LastOwner"\t\t"0"
+\t"UpdateResult"\t\t"0"
+\t"BytesToDownload"\t\t"0"
+\t"BytesDownloaded"\t\t"0"
+\t"BytesToStage"\t\t"0"
+\t"BytesStaged"\t\t"0"
+\t"TargetBuildID"\t\t"0"
+\t"AutoUpdateBehavior"\t\t"${autoUpdate}"
+\t"AllowOtherDownloadsWhileRunning"\t\t"0"
+\t"ScheduledAutoUpdate"\t\t"0"
+\t"InstalledDepots"
+\t{
+${depotsSection}
+\t}
+\t"SharedDepots"\t\t{}
+\t"UserConfig"\t\t{}
+\t"MountedConfig"\t\t{}
+}`;
+
+            return generatedACF;
+        }
+
+        // ============================================
+        // GENERATE LUA TABLE
+        // ============================================
+        function generateLua() {
+            const stateFlags = document.getElementById('stateFlags').value;
+            const autoUpdate = document.getElementById('autoUpdate').value;
+            const includeDepots = document.getElementById('includeDepots').checked;
+            const timestamp = Math.floor(Date.now() / 1000);
+
+            let depotsLua = '';
+            if (includeDepots) {
+                const depotEntries = gtaV.depots.map(depot => 
+                    `\t\t["${depot.id}"] = {\n\t\t\tmanifest = "${depot.manifest}",\n\t\t\tname = "${depot.name}",\n\t\t\tsize = "${depot.size}"\n\t\t}`
+                ).join(',\n');
+                depotsLua = depotEntries;
+            }
+
+            generatedLua = `-- Steam Manifest for ${gtaV.name}
+-- Generated: ${new Date().toISOString()}
+
+local AppState = {
+\tappid = "${gtaV.appid}",
+\tUniverse = "1",
+\tname = "${gtaV.name}",
+\tStateFlags = "${stateFlags}",
+\tinstalldir = "${gtaV.installdir}",
+\tLastUpdated = "${timestamp}",
+\tSizeOnDisk = "0",
+\tStagingSize = "0",
+\tbuildid = "0",
+\tLastOwner = "0",
+\tUpdateResult = "0",
+\tBytesToDownload = "0",
+\tBytesDownloaded = "0",
+\tBytesToStage = "0",
+\tBytesStaged = "0",
+\tTargetBuildID = "0",
+\tAutoUpdateBehavior = "${autoUpdate}",
+\tAllowOtherDownloadsWhileRunning = "0",
+\tScheduledAutoUpdate = "0",
+\tInstalledDepots = {
+${depotsLua}
+\t},
+\tSharedDepots = {},
+\tUserConfig = {},
+\tMountedConfig = {}
+}
+
+return AppState`;
+
+            return generatedLua;
+        }
+
+        // ============================================
+        // DOWNLOAD FILE FUNCTION
+        // ============================================
+        function downloadFile(content, filename) {
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            
+            // Append to body (required for Firefox)
+            document.body.appendChild(link);
+            
+            // Trigger click
+            link.click();
+            
+            // Cleanup
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            return true;
+        }
+
+        // ============================================
+        // SHOW TOAST
+        // ============================================
+        function showToast(message, isSuccess = true) {
+            toastMessage.textContent = message;
+            toast.className = 'toast show ' + (isSuccess ? 'toast-success' : 'toast-error');
+            toast.querySelector('.toast-icon').textContent = isSuccess ? '✅' : '❌';
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============================================
+        // DISPLAY OUTPUT
+        // ============================================
+        function displayOutput(showLuaTab = false) {
+            outputSection.classList.add('visible');
+            luaTab.style.display = showLuaTab ? 'block' : 'none';
+            
+            if (currentTab === 'acf') {
+                codeOutput.textContent = generatedACF;
+                fileName.textContent = `appmanifest_${gtaV.appid}.acf`;
+            } else {
+                codeOutput.textContent = generatedLua;
+                fileName.textContent = `manifest_${gtaV.appid}.lua`;
+            }
+            
+            outputSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        
+        // Generate & Download Button
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const format = document.getElementById('outputFormat').value;
+            
+            generateACF();
+            generateLua();
+            
+            let downloadCount = 0;
+            
+            if (format === 'acf' || format === 'both') {
+                if (downloadFile(generatedACF, `appmanifest_${gtaV.appid}.acf`)) {
+                    downloadCount++;
+                }
+            }
+            
+            if (format === 'lua' || format === 'both') {
+                setTimeout(() => {
+                    if (downloadFile(generatedLua, `manifest_${gtaV.appid}.lua`)) {
+                        downloadCount++;
+                    }
+                }, 500); // Small delay for multiple downloads
+            }
+            
+            currentTab = format === 'lua' ? 'lua' : 'acf';
+            displayOutput(format === 'both' || format === 'lua');
+            
+            const fileText = format === 'both' ? 'Files' : 'File';
+            showToast(`${fileText} downloaded successfully!`);
+        });
+
+        // Preview Only Button
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            const format = document.getElementById('outputFormat').value;
+            
+            generateACF();
+            generateLua();
+            
+            currentTab = format === 'lua' ? 'lua' : 'acf';
+            displayOutput(format === 'both' || format === 'lua');
+            
+            showToast('Preview generated!');
+        });
+
+        // Copy Button
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const content = currentTab === 'acf' ? generatedACF : generatedLua;
+            
+            navigator.clipboard.writeText(content).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = content;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied to clipboard!');
+            });
+        });
+
+        // Manual Download Button
+        document.getElementById('manualDownloadBtn').addEventListener('click', function() {
+            const content = currentTab === 'acf' ? generatedACF : generatedLua;
+            const ext = currentTab === 'acf' ? 'acf' : 'lua';
+            const prefix = currentTab === 'acf' ? 'appmanifest_' : 'manifest_';
+            
+            if (downloadFile(content, `${prefix}${gtaV.appid}.${ext}`)) {
+                showToast('File downloaded!');
+            } else {
+                showToast('Download failed!', false);
+            }
+        });
+
+        // Output Tab Switching
+        document.querySelectorAll('.output-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentTab = this.dataset.tab;
+                
+                if (currentTab === 'acf') {
+                    codeOutput.textContent = generatedACF;
+                    fileName.textContent = `appmanifest_${gtaV.appid}.acf`;
+                } else {
+                    codeOutput.textContent = generatedLua;
+                    fileName.textContent = `manifest_${gtaV.appid}.lua`;
+                }
+            });
+        });
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        renderDepots();
+    </script>
+</body>
+</html>
